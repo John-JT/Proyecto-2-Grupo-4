@@ -25,7 +25,7 @@ module font_rom8x16
    
    Posicion_ROM8x16 inst_Posicion_ROM8x16(
    .resetM(resetM),
-   .Qh(Qh),
+   .Qh(Qh[9:3]),
    .Qv(Qv),
    .reloj(reloj),
    .DIR8x16 (addr)

@@ -3,10 +3,10 @@
 
 
 module font_rom8x8(
-input wire [7:0] DIR_DATO,
+/*input wire [7:0] DIR_DATO,
 input wire [3:0] POSICION,
-input RD,
-input wire [9:0] Qh,
+input RD,*/
+input wire [9:0]Qh,
 input wire [9:0]Qv,
 input wire resetM,
 input wire reloj,
@@ -18,34 +18,23 @@ output wire BIT_FUENTE
     wire [7:0] DATA;
     reg bit_fuente;
     wire [11:0] addr1;
-    wire [11:0] addr2;
+   /* wire [11:0] addr2;*/
     reg [3:0] SELEC_PX;
     
    Posicion_ROM8x8 inst_Posicion_ROM8x8(
    .resetM(resetM),
-   .Qh(Qh),
+   .Qh(Qh[9:3]),
    .Qv(Qv),
    .reloj(reloj),
    .DIR8x8 (addr1)
    );
- Manejo_Entradas inst_Manejo_Entradas(
-       .DIR_DATO(DIR_DATO),
-       .POSICION(POSICION),
-       .RD(RD),
-       .resetM(resetM),
-       .reloj(reloj),
-       .Qh(Qh[9:3]),
-       .Qv(Qv),
-       /*input [23:0] ALARMA,*/
-       .DIR_MEM(addr2)  
-       );
     
    // body
     always @(*) begin
        SELEC_PX <= {1'b0, Qh[2], Qh[1], Qh[0]};
        end
     always @(posedge reloj) 
-       addr_reg <= addr1|addr2;
+       addr_reg <= addr1/*|addr2*/;
           
     always @(*)
         case (addr_reg)

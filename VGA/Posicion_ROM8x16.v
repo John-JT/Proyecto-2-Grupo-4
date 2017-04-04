@@ -2,7 +2,7 @@
 
 module Posicion_ROM8x16(
 input resetM,
-input [9:0] Qh,
+input [6:0] Qh, //input [9:0] Qh,
 input [9:0] Qv,
 input reloj,
 output [19:0] DIR8x16
@@ -39,13 +39,14 @@ parameter Y_b = 16'h2347; parameter Z_b = 16'h2449;
 
               /*********************HORIZONTAL*********************/
                                     /*HORA*/
-parameter H1_h = 7'd10; parameter O1_h = 7'd12; parameter R1_h = 7'd14; parameter A1_h = 7'd16;
+parameter H1_h = 7'd12; parameter O1_h = 7'd14; parameter R1_h = 7'd16; parameter A1_h = 7'd18;
                                   /*DIA/MES/ANO*/      
 parameter D1_h = 7'd34; parameter I1_h = 7'd36; parameter A2_h = 7'd38; parameter Space1_h = 7'd40;
 parameter M1_h = 7'd42; parameter E1_h = 7'd44; parameter S1_h = 7'd46; parameter Space2_h = 7'd48;
 parameter A3_h = 7'd50; parameter N1_h = 7'd52; parameter O2_h = 7'd54; 
-                                    /*CRONO*/  
-parameter C1_h = 7'd72; parameter R2_h = 7'd74; parameter O3_h = 7'd76; parameter N2_h = 7'd78; parameter O4_h = 7'd80;
+                                    /*CRONOMETRO*/  
+parameter C1_h = 7'd64; parameter R2_h = 7'd66; parameter O3_h = 7'd68; parameter N2_h = 7'd70; parameter O4_h = 7'd72;
+parameter M2_h = 7'd74; parameter E2_h = 7'd76; parameter T1_h = 7'd78; parameter R3_h = 7'd80; parameter O5_h = 7'd82;
              
               /*********************VERTICAL*********************/
                                  /*HORA Y CRONO*/
@@ -57,7 +58,7 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
 
     always @(posedge reloj) begin
         M_v <= {Qv[9],Qv[8],Qv[7],Qv[6],Qv[5],Qv[4]};
-        M_h <= {Qh[9],Qh[8],Qh[7],Qh[6],Qh[5],Qh[4],Qh[3]};
+        M_h <= {Qh[6],Qh[5],Qh[4],Qh[3],Qh[2],Qh[1],Qh[0]};
 	    SELEC_COL <= {Qv[3], Qv[2], Qv[1], Qv[0]};
 	    NA <= {Qv[4], Qv[3], Qv[2], Qv[1], Qv[0]};
 	    
@@ -67,8 +68,7 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                 DIR <= 20'h00000;  
             else
             begin
-                                             /*HORA Y CRONO*/
-                                             
+                                             /*HORA Y CRONO*/                       
                 if (M_v >= HCU_v && M_v < MITAD)
                 begin
                                 /*HORA*/
@@ -81,7 +81,7 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                    else if (M_h >= R1_h && M_h < A1_h)
                         DIR <= {R_a, SELEC_COL};
                         
-                   else if (M_h >= A1_h && M_h < 7'd18)
+                   else if (M_h >= A1_h && M_h < 7'd20)
                         DIR <= {A_a, SELEC_COL};
                         
                                 /*CRONO*/
@@ -97,8 +97,23 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                    else if (M_h >= N2_h && M_h < O4_h)
                         DIR <= {N_a, SELEC_COL};
                         
-                   else if (M_h >= O4_h && M_h < 7'd82)
-                        DIR <= {O_a, SELEC_COL};     
+                   else if (M_h >= O4_h && M_h < M2_h)
+                        DIR <= {O_a, SELEC_COL}; 
+                         
+                   else if (M_h >= M2_h && M_h < E2_h)
+                        DIR <= {M_a, SELEC_COL}; 
+                         
+                   else if (M_h >= E2_h && M_h < T1_h)
+                       DIR <= {E_a, SELEC_COL};
+                       
+                   else if (M_h >= T1_h && M_h < R3_h)
+                       DIR <= {T_a, SELEC_COL};
+                       
+                   else if (M_h >= R3_h && M_h < O5_h)
+                       DIR <= {R_a, SELEC_COL};
+                           
+                   else if (M_h >= O5_h && M_h < 7'd84)
+                       DIR <= {O_a, SELEC_COL};
                    else 
                         DIR <= 20'h00000;  
                 end
@@ -115,7 +130,7 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                    else if (M_h >= R1_h && M_h < A1_h)
                         DIR <= {R_b, SELEC_COL};
                         
-                   else if (M_h >= A1_h && M_h < 7'd18)
+                   else if (M_h >= A1_h && M_h < 7'd20)
                         DIR <= {A_b, SELEC_COL};
                         
                                 /*CRONO*/
@@ -131,10 +146,25 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                    else if (M_h >= N2_h && M_h < O4_h)
                         DIR <= {N_b, SELEC_COL};
                         
-                   else if (M_h >= O4_h && M_h < 7'd82)
-                        DIR <= {O_b, SELEC_COL};     
+                   else if (M_h >= O4_h && M_h < M2_h)
+                        DIR <= {O_b, SELEC_COL}; 
+                        
+                   else if (M_h >= M2_h && M_h < E2_h)
+                        DIR <= {M_b, SELEC_COL}; 
+                        
+                   else if (M_h >= E2_h && M_h < T1_h)
+                        DIR <= {E_b, SELEC_COL};
+                      
+                   else if (M_h >= T1_h && M_h < R3_h)
+                        DIR <= {T_b, SELEC_COL};
+                        
+                   else if (M_h >= R3_h && M_h < O5_h)
+                        DIR <= {R_b, SELEC_COL};
+                      
+                   else if (M_h >= O5_h && M_h < 7'd84)
+                       DIR <= {O_b, SELEC_COL};
                    else 
-                        DIR <= 20'h00000; 
+                       DIR <= 20'h00000; 
                 end
                 
          
@@ -235,6 +265,8 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                  else 
                         DIR <= 20'h00000;  
                 end  
+                else
+                    DIR <= 20'h00000;
                 
            end
            end 

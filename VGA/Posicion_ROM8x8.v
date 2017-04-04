@@ -1,9 +1,8 @@
 `timescale 1ns / 1ps
 
 module Posicion_ROM8x8(
-    input [7:0] BCD,
     input resetM,
-    input [9:0] Qh,
+    input [6:0] Qh,
     input [9:0] Qv,
     input reloj,
     output [11:0] DIR8x8
@@ -75,7 +74,7 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
     always @(posedge reloj) begin
         M_v <= {Qv[9],Qv[8],Qv[7],Qv[6],Qv[5],Qv[4]};
         M_v1 <= {Qv[9],Qv[8],Qv[7],Qv[6],Qv[5],Qv[4],Qv[3]};
-        M_h <= {Qh[9],Qh[8],Qh[7],Qh[6],Qh[5],Qh[4],Qh[3]};
+        M_h <= {Qh[6],Qh[5],Qh[4],Qh[3],Qh[2],Qh[1],Qh[0]};
 	    SELEC_COL <= {1'b0, Qv[2], Qv[1], Qv[0]};
         end
         
@@ -412,6 +411,8 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
                else 
                    DIR <=  12'h000;
                end 
+            else
+                DIR <= 12'h000;
                           
            end
     
