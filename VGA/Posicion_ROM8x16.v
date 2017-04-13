@@ -1,18 +1,19 @@
 `timescale 1ns / 1ps
 
 module Posicion_ROM8x16(
+//input bit_alarma,
+input A_A,
 input resetM,
 input [6:0] Qh, //input [9:0] Qh,
 input [9:0] Qv,
 input reloj,
-output [19:0] DIR8x16
+output [8:0] DIR8x16
     );
 
     reg [6:0] M_h;
     reg [5:0] M_v;
     reg [3:0] SELEC_COL;
-    reg [19:0] DIR;
-    reg [4:0] NA;
+    reg [8:0] DIR;
     
     
                         /***********PARAMETROS***********/
@@ -23,23 +24,26 @@ parameter CINCO = 12'h060; parameter SEIS = 12'h070; parameter SIETE = 12'h081; 
 
                                     /*Parte Alta*/
 
-parameter A_a = 16'h0b16; parameter B_a = 16'h0c18; parameter C_a = 16'h0d1a; parameter D_a = 16'h0e1c; parameter E_a = 16'h0f1e; parameter F_a = 16'h1020;
-parameter G_a = 16'h1122; parameter H_a = 16'h1224; parameter I_a = 16'h1326; parameter J_a = 16'h1428; parameter K_a = 16'h152a; parameter L_a = 16'h162c;
-parameter M_a = 16'h172e; parameter N_a = 16'h1830; parameter O_a= 16'h1932; parameter P_a = 16'h1a34; parameter Q_a = 16'h1b36; parameter R_a = 16'h1c38;
-parameter S_a = 16'h1d3a; parameter T_a = 16'h1e3c; parameter U_a = 16'h1f3e; parameter V_a = 16'h2040; parameter W_a = 16'h2142; parameter X_a = 16'h2244;
-parameter Y_a = 16'h2346; parameter Z_a = 16'h2448;
+parameter A_a = 5'h02;  parameter C_a = 5'h04; parameter D_a = 5'h06; parameter E_a = 5'h08; parameter F_a = 5'h0a;
+
+parameter H_a = 5'h0c; parameter I_a = 5'h0e; parameter M_a = 5'h10; parameter N_a = 5'h12; parameter O_a= 5'h14; 
+
+parameter P_a = 5'h16; parameter R_a = 5'h18; parameter S_a = 5'h1a; parameter T_a = 5'h1c;  
 
                                     /*Parte Baja*/
-                                    
-parameter A_b = 16'h0b17; parameter B_b = 16'h0c19; parameter C_b = 16'h0d1b; parameter D_b = 16'h0e1d; parameter E_b = 16'h0f1f; parameter F_b = 16'h1021;
-parameter G_b = 16'h1123; parameter H_b = 16'h1225; parameter I_b = 16'h1327; parameter J_b = 16'h1429; parameter K_b = 16'h152b; parameter L_b = 16'h162d;
-parameter M_b = 16'h172f; parameter N_b = 16'h1831; parameter O_b= 16'h1933; parameter P_b = 16'h1a35; parameter Q_b = 16'h1b37; parameter R_b = 16'h1c39;
-parameter S_b = 16'h1d3b; parameter T_b = 16'h1e3d; parameter U_b = 16'h1f3f; parameter V_b = 16'h2041; parameter W_b = 16'h2143; parameter X_b = 16'h2245;
-parameter Y_b = 16'h2347; parameter Z_b = 16'h2449;
+
+parameter A_b = 5'h03; parameter  C_b = 5'h05; parameter D_b = 5'h07; parameter E_b = 5'h09; parameter F_b = 5'h0b;
+
+parameter H_b = 5'h0d; parameter I_b = 5'h0f; parameter M_b = 5'h11; parameter N_b = 5'h13; parameter O_b= 5'h15; 
+
+parameter P_b = 5'h17;  parameter R_b = 5'h19; parameter S_b = 5'h1b; parameter T_b = 5'h1d; 
+
 
               /*********************HORIZONTAL*********************/
                                     /*HORA*/
-parameter H1_h = 7'd12; parameter O1_h = 7'd14; parameter R1_h = 7'd16; parameter A1_h = 7'd18;
+parameter H1_h = 7'd14; parameter O1_h = 7'd16; parameter R1_h = 7'd18; parameter A1_h = 7'd20; parameter A1_h2 = 7'd22;
+/*parameter H1_h = 7'd10; parameter O1_h = 7'd12; parameter R1_h = 7'd14; parameter A1_h = 7'd16; parameter A1_h2 = 7'd18;
+*/
                                   /*DIA/MES/ANO*/      
 parameter D1_h = 7'd34; parameter I1_h = 7'd36; parameter A2_h = 7'd38; parameter Space1_h = 7'd40;
 parameter M1_h = 7'd42; parameter E1_h = 7'd44; parameter S1_h = 7'd46; parameter Space2_h = 7'd48;
@@ -52,24 +56,21 @@ parameter M2_h = 7'd74; parameter E2_h = 7'd76; parameter T1_h = 7'd78; paramete
                                  /*HORA Y CRONO*/
 parameter HCU_v = 6'd10; parameter HCD_v = 6'd12; parameter MITAD = 6'd11;
                                 /*DIA/MES/ANO*/
-parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17; 
-
-
+parameter FECHAU_v = 6'd18; parameter FECHAD_v = 6'd20; parameter mitad = 6'd19;
 
     always @(posedge reloj) begin
         M_v <= {Qv[9],Qv[8],Qv[7],Qv[6],Qv[5],Qv[4]};
         M_h <= {Qh[6],Qh[5],Qh[4],Qh[3],Qh[2],Qh[1],Qh[0]};
 	    SELEC_COL <= {Qv[3], Qv[2], Qv[1], Qv[0]};
-	    NA <= {Qv[4], Qv[3], Qv[2], Qv[1], Qv[0]};
 	    
         end
     always@(*)begin
             if (resetM == 1'b1) 
-                DIR <= 20'h00000;  
+                DIR <= 9'h000;  
             else
             begin
                                              /*HORA Y CRONO*/                       
-                if (M_v >= HCU_v && M_v < MITAD)
+                if (M_v >= HCU_v && M_v < MITAD && A_A == 1'b0)
                 begin
                                 /*HORA*/
                    if (M_h >= H1_h && M_h < O1_h)
@@ -81,7 +82,7 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                    else if (M_h >= R1_h && M_h < A1_h)
                         DIR <= {R_a, SELEC_COL};
                         
-                   else if (M_h >= A1_h && M_h < 7'd20)
+                   else if (M_h >= A1_h && M_h < A1_h2)
                         DIR <= {A_a, SELEC_COL};
                         
                                 /*CRONO*/
@@ -115,10 +116,10 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                    else if (M_h >= O5_h && M_h < 7'd84)
                        DIR <= {O_a, SELEC_COL};
                    else 
-                        DIR <= 20'h00000;  
+                        DIR <= 9'h000;  
                 end
                 
-                else if (M_v >= MITAD && M_v < HCD_v)
+                else if (M_v >= MITAD && M_v < HCD_v && A_A == 1'b0)
                 begin
                                  /*HORA*/
                    if (M_h >= H1_h && M_h < O1_h)
@@ -130,7 +131,7 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                    else if (M_h >= R1_h && M_h < A1_h)
                         DIR <= {R_b, SELEC_COL};
                         
-                   else if (M_h >= A1_h && M_h < 7'd20)
+                   else if (M_h >= A1_h && M_h < A1_h2)
                         DIR <= {A_b, SELEC_COL};
                         
                                 /*CRONO*/
@@ -164,11 +165,11 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                    else if (M_h >= O5_h && M_h < 7'd84)
                        DIR <= {O_b, SELEC_COL};
                    else 
-                       DIR <= 20'h00000; 
+                       DIR <= 9'h000; 
                 end
                 
          
-                else if (M_v >= FECHAU_v && M_v < mitad)
+                else if (M_v >= FECHAU_v && M_v < mitad && A_A == 1'b0)
                 begin 
                                 /*DIA*/
 /*parameter D1_h = 7'd40; parameter I1_h = 7'd42; parameter A2_h = 7'd44; parameter Space1_h = 7'd46;
@@ -214,10 +215,10 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                         DIR <= {O_a, SELEC_COL};
                         
                  else 
-                        DIR <= 20'h00000; 
+                        DIR <= 9'h000; 
                 end
                 
-                else if (M_v >= mitad && M_v <FECHAD_v)
+                else if (M_v >= mitad && M_v <FECHAD_v && A_A == 1'b0)
                 begin 
                                 /*DIA*/
 /*parameter D1_h = 7'd40; parameter I1_h = 7'd42; parameter A2_h = 7'd44; parameter Space1_h = 7'd46;
@@ -263,15 +264,15 @@ parameter FECHAU_v = 6'd16; parameter FECHAD_v = 6'd18; parameter mitad = 6'd17;
                         DIR <= {O_b, SELEC_COL};
                         
                  else 
-                        DIR <= 20'h00000;  
+                        DIR <= 9'h000;  
                 end  
                 else
-                    DIR <= 20'h00000;
+                    DIR <= 9'h000;
                 
            end
            end 
            
-                assign DIR8x16 [19:0] = DIR;
+                assign DIR8x16 = DIR;
                        
  
 endmodule

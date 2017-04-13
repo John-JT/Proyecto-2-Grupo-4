@@ -3,8 +3,10 @@
 module counter(
     output wire [9:0] Qh,
     output wire [9:0] Qv,
-    output wire H_Sync,
-    output wire V_Sync,
+    output reg H_Syncreg,
+    output reg V_Syncreg,
+    /*output wire H_Sync,
+    output wire V_Sync,*/
     output wire V_ON,
     output wire H_ON,
     input resetM,
@@ -21,8 +23,8 @@ reg [9:0] Qvreg=10'b0000000000;
 reg[1:0] enableH = 2'b00;
 reg enableV;
 
-reg H_Syncreg;
-reg V_Syncreg;
+/*reg H_Syncreg;
+reg V_Syncreg;*/
 
 reg H_ONreg;
 reg V_ONreg;
@@ -134,14 +136,8 @@ reg V_ONreg;
 
  assign Qh = Qhreg;
  assign Qv = Qvreg;
- 
- assign H_Sync = H_Syncreg;
- assign V_Sync = V_Syncreg;
- /*assign H_Sync2 = H_Syncreg;
- assign V_Sync2 = V_Syncreg;*/
- 
- 
- 
+ //assign H_Sync = H_Syncreg;
+ //assign V_Sync = V_Syncreg; 
  assign H_ON = H_ONreg;
  assign V_ON = V_ONreg;
 

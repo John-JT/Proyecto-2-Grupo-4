@@ -3,9 +3,8 @@
 
 
 module font_rom8x8(
-/*input wire [7:0] DIR_DATO,
-input wire [3:0] POSICION,
-input RD,*/
+input bit_alarma,
+input A_A,
 input wire [9:0]Qh,
 input wire [9:0]Qv,
 input wire resetM,
@@ -15,13 +14,13 @@ output wire BIT_FUENTE
    // signal declaration
     reg [11:0] addr_reg;
     reg [7:0] data;
-    wire [7:0] DATA;
     reg bit_fuente;
     wire [11:0] addr1;
-   /* wire [11:0] addr2;*/
-    reg [3:0] SELEC_PX;
+    reg [2:0] SELEC_PX;
     
    Posicion_ROM8x8 inst_Posicion_ROM8x8(
+   //.bit_alarma(bit_alarma),
+   .A_A(A_A),
    .resetM(resetM),
    .Qh(Qh[9:3]),
    .Qv(Qv),
@@ -31,12 +30,12 @@ output wire BIT_FUENTE
     
    // body
     always @(*) begin
-       SELEC_PX <= {1'b0, Qh[2], Qh[1], Qh[0]};
+       SELEC_PX <= {Qh[2], Qh[1], Qh[0]};
        end
     always @(posedge reloj) 
-       addr_reg <= addr1/*|addr2*/;
+       addr_reg <= addr1;
           
-    always @(*)
+    always @(posedge reloj)
         case (addr_reg)
         //code x00
         /*NADA*/
@@ -482,55 +481,27 @@ output wire BIT_FUENTE
         12'h2b5: data <= 8'h18; // 
         12'h2b6: data <= 8'h00; // 
         12'h2b7: data <= 8'h00; // 
-        
-        /*
-        //code x2c
-        12'h2c0: data <= 8'h00; // 
-        12'h2c1: data <= 8'h00; // 
-        12'h2c2: data <= 8'h00; // 
-        12'h2c3: data <= 8'h00; // 
-        12'h2c4: data <= 8'h00; // 
-        12'h2c5: data <= 8'h00; // 
-        12'h2c6: data <= 8'h00; // 
-        12'h2c7: data <= 8'h00; // 
-        //code x2d
-        12'h2d0: data <= 8'h00; // 
-        12'h2d1: data <= 8'h00; // 
-        12'h2d2: data <= 8'h00; // 
-        12'h2d3: data <= 8'h00; // 
-        12'h2d4: data <= 8'h00; // 
-        12'h2d5: data <= 8'h00; // 
-        12'h2d6: data <= 8'h00; // 
-        12'h2d7: data <= 8'h00; //  ******
-        //code x2e
-        12'h2e0: data <= 8'h00; // 
-        12'h2e1: data <= 8'h00; // 
-        12'h2e2: data <= 8'h00; // 
-        12'h2e3: data <= 8'h00; // 
-        12'h2e4: data <= 8'h00; // 
-        12'h2e5: data <= 8'h00; // 
-        12'h2e6: data <= 8'h00; // 
-        12'h2e7: data <= 8'h00; // */
-        
+                
         default: data <= 8'h00; //
 
     endcase
+       
         
-        
-   always @(SELEC_PX, data[7], data[6], data[5], data[4], data[3], data[2], data[1], data[0])
+ always @(bit_alarma,SELEC_PX, data[7], data[6], data[5], data[4], data[3], data[2], data[1], data[0])
+if (bit_alarma == 1'b0)
       case (SELEC_PX)
-         4'b0000: bit_fuente <= data[7];
-         4'b0001: bit_fuente <= data[6];
-         4'b0010: bit_fuente <= data[5];
-         4'b0011: bit_fuente <= data[4];
-         4'b0100: bit_fuente <= data[3];
-         4'b0101: bit_fuente <= data[2];
-         4'b0110: bit_fuente <= data[1];
-         4'b0111: bit_fuente <= data[0];
+         3'b000: bit_fuente <= data[7];
+         3'b001: bit_fuente <= data[6];
+         3'b010: bit_fuente <= data[5];
+         3'b011: bit_fuente <= data[4];
+         3'b100: bit_fuente <= data[3];
+         3'b101: bit_fuente <= data[2];
+         3'b110: bit_fuente <= data[1];
+         3'b111: bit_fuente <= data[0];
          default: bit_fuente <= 1'b0;
       endcase
-      
+else
+    bit_fuente <= 'b0;     
       assign BIT_FUENTE = bit_fuente;
-					
-				    
+									    
 endmodule

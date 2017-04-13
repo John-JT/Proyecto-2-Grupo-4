@@ -1,6 +1,8 @@
 `timescale 1ns / 1ps
 
 module Posicion_ROM8x8(
+    //input bit_alarma,
+    input A_A,
     input resetM,
     input [6:0] Qh,
     input [9:0] Qv,
@@ -60,14 +62,23 @@ parameter M3_h = 7'd26; parameter A7_h = 7'd27;
                                         /*DETENER*/
 parameter D1_h = 7'd14; parameter E3_h = 7'd15; parameter T2_h = 7'd16; parameter E4_h = 7'd17;
 parameter N2_h = 7'd18; parameter E5_h = 7'd19; parameter R8_h = 7'd20;
+
+                                        /*FORMATO*/
+parameter F2_h = 7'd14; parameter O6_h = 7'd15; parameter R9_h = 7'd16; parameter M4_h = 7'd17; parameter A8_h = 7'd18;
+parameter T3_h = 7'd19; parameter O7_h = 7'd20;
+
+                                         /*HORA*/
+parameter H3_h = 7'd22; parameter O8_h = 7'd23; parameter R10_h = 7'd24; parameter A9_h = 7'd25;
     
                     /*********************VERTICAL*********************/
     
-parameter HORA_v = 6'd22; parameter FECHA_v = 6'd23; parameter CRONOMETRO_v = 6'd24;
-parameter ALARMA_v = 6'd25;
+parameter HORA_v = 6'd24; parameter HORA1_v = 7'd49; parameter FECHA_v = 6'd25; parameter FECHA1_v = 7'd51; 
+parameter CRONOMETRO_v = 6'd26; parameter CRONOMETRO1_v = 7'd53; parameter ALARMA_v = 6'd27; parameter ALARMA1_v = 7'd55;
+
+parameter AMPM_v = 6'd28; parameter AMPM1_v = 7'd57;
     
                             /*SWITCHES  Y  Botones*/
-parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; parameter sw0_v = 6'd25;
+parameter sw1_v = 6'd24; parameter sw2_v = 6'd25; parameter sw3_v = 6'd26; parameter sw4_v = 6'd27; parameter sw0_v = 6'd28;
                
                 
                 
@@ -84,7 +95,7 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
         else
         begin       
 //*************************************************************************
-            if (M_v >= HORA_v && M_v1 < 7'd45)
+            if (M_v >= HORA_v && M_v1 < HORA1_v)
             begin
 				            /*SW1*/
   		        if (M_h >= sw_s && M_h < sw_w) 
@@ -125,11 +136,7 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
                     DIR <= {R, SELEC_COL};
 
                              /*HORA*/ 
-                             /*parameter H1_h = 7'd24; 
-                             parameter O2_h = 7'd25; 
-                             parameter R4_h = 7'd26; 
-                             parameter A3_h = 7'd27;
-*/               
+
                 else if (M_h >= H1_h && M_h < O2_h)
                     DIR <= {H, SELEC_COL};
                 
@@ -143,9 +150,6 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
                     DIR <= {A, SELEC_COL};
                     
                     /*FLECHA Y BOTON ARRIBA*/
-       /* parameter L_h = 7'd70; parameter U_h = 7'd71; parameter D_h = 7'd71; parameter R_h = 7'd72;
-        parameter b1_h = 7'd73; parameter l1_h = 7'd74; parameter b2_h = 7'd75; parameter u1_h = 7'd76;
-        parameter b3_h = 7'd77; parameter r1_h = 7'd78; parameter b4_h = 7'd75; parameter d1_h = 7'd76;*/
         
                 else if (M_h >= U_h && M_h < R_h)
                     DIR <={4'h2, 4'h8, SELEC_COL};
@@ -159,7 +163,7 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
                     DIR <=  12'h000;
                 end
 //*************************************************************************
-            else if (M_v >= FECHA_v && M_v1 < 7'd47)
+            else if (M_v >= FECHA_v && M_v1 < FECHA1_v)
                 begin
                           /*SW2*/
                 if (M_h >= sw_s && M_h < sw_w)
@@ -200,12 +204,7 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
                     DIR <= {R, SELEC_COL};
                     
                            /*FECHA*/
-                         /*parameter F1_h = 7'd24; 
-                           parameter E1_h = 7'd25; 
-                           parameter C1_h = 7'd26; 
-                           parameter H2_h = 7'd27;
-                           parameter A4_h = 7'd28;
-                          */  
+
                 else if (M_h >= F1_h && M_h < E1_h)
                     DIR <= {F, SELEC_COL};
                     
@@ -222,9 +221,7 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
                     DIR <= {A, SELEC_COL};
                     
                 /*FLECHAS(IZQ, DER) BOTONES (IZQ, DER)*/  
-                       /* parameter L_h = 7'd70; parameter U_h = 7'd71; parameter D_h = 7'd71; parameter R_H = 7'd72;
-                 parameter b1_h = 7'd73; parameter l1_h = 7'd74; parameter b2_h = 7'd75; parameter u1_h = 7'd76;
-                 parameter b3_h = 7'd77; parameter r1_h = 7'd78; parameter b4_h = 7'd75; parameter d1_h = 7'd76;*/
+
                 else if (M_h >= L_h && M_h < U_h)
                     DIR <= {4'h2, 4'ha, SELEC_COL};
                     
@@ -247,7 +244,7 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
                     DIR <=  12'h000;
                end
 //*************************************************************************
-            else if (M_v >= CRONOMETRO_v && M_v1 < 7'd49)
+            else if (M_v >= CRONOMETRO_v && M_v1 < CRONOMETRO1_v)
                begin 
                   		    /*SW3*/
                 if (M_h >= sw_s && M_h < sw_w)
@@ -287,12 +284,6 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
                     DIR <= {R, SELEC_COL};
                     
                         /*CRONOMETRO*/
-                       /*parameter C2_h = 7'd24; parameter R5_h = 7'd25; 
-                         parameter O3_h = 7'd26; parameter N1_h = 7'd27;
-                         parameter O4_h = 7'd28; parameter M2_h = 7'd29; 
-                         parameter E2_h = 7'd30; parameter T1_h = 7'd31;
-                         parameter R6_h = 7'd32; parameter O5_h = 7'd33; 
-*/
     
                else if (M_h >= C2_h && M_h < R5_h)
                     DIR <= {C, SELEC_COL};
@@ -325,9 +316,7 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
                     DIR <= {O, SELEC_COL};
                     
                     /*FLECHA Y BOTON ABAJO*/
-                               /* parameter L_h = 7'd70; parameter U_h = 7'd71; parameter D_h = 7'd71; parameter R_H = 7'd72;
-              parameter b1_h = 7'd73; parameter l1_h = 7'd74; parameter b2_h = 7'd75; parameter u1_h = 7'd76;
-              parameter b3_h = 7'd77; parameter r1_h = 7'd78; parameter b4_h = 7'd75; parameter d1_h = 7'd76;*/     
+
                else if (M_h >= D_h && M_h < R_h)
                     DIR <= {4'h2, 4'h9, SELEC_COL};
                     
@@ -342,26 +331,18 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
               end
               
 //*************************************************************************
-            else if (M_v >= ALARMA_v && M_v1 < 7'd51)
+            else if (M_v >= ALARMA_v && M_v1 < ALARMA1_v)
                 begin
-                         	/*SW0*/
+                         	/*SW4*/
                 if (M_h >= sw_s && M_h < sw_w)
                   DIR <= {S, SELEC_COL};
                 else if (M_h >= sw_w && M_h < sw_num)
                   DIR <= {W, SELEC_COL};
                 else if (M_h >= sw_num && M_h < sw_sep)
-                  DIR <= {CERO, SELEC_COL};
+                  DIR <= {CUATRO, SELEC_COL};
                 else if (M_h >= sw_sep && M_h < 7'd14)
                   DIR <= {4'h1, 4'h3, SELEC_COL};
-                      /*DETENER*/
-                       /*
-                parameter D1_h = 7'd14; 
-                parameter E3_h = 7'd15; 
-                parameter T2_h = 7'd16; 
-                parameter E4_h = 7'd17;
-                parameter N2_h = 7'd18; 
-                parameter E5_h = 7'd19; 
-                parameter R8_h = 7'd20;*/
+                           /*DETENER*/
 
                else if (M_h >= D1_h && M_h < E3_h)
                    DIR <= {D, SELEC_COL};
@@ -385,12 +366,7 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
                    DIR <= {R, SELEC_COL};
                    
                             /*ALARMA*/
-                             /*parameter A5_h = 7'd22; 
-                   parameter L1_h = 7'd23; 
-                   parameter A6_h = 7'd24; 
-                   parameter R7_h = 7'd25; 
-                   parameter M3_h = 7'd26; 
-                   parameter A7_h = 7'd27;*/
+
                else if (M_h >= A5_h && M_h < L1_h)
                    DIR <= {A, SELEC_COL};
                    
@@ -410,14 +386,69 @@ parameter sw1_v = 6'd22; parameter sw2_v = 6'd23; parameter sw3_v = 6'd24; param
                    DIR <= {A, SELEC_COL};
                else 
                    DIR <=  12'h000;
-               end 
+               end                
+//*************************************************************************
+            else if (M_v >= AMPM_v && M_v1 < AMPM1_v)
+            begin
+                            /*SW0*/
+                if (M_h >= sw_s && M_h < sw_w)
+                  DIR <= {S, SELEC_COL};
+                  
+                else if (M_h >= sw_w && M_h < sw_num)
+                  DIR <= {W, SELEC_COL};
+                  
+                else if (M_h >= sw_num && M_h < sw_sep)
+                  DIR <= {CERO, SELEC_COL};
+                  
+                else if (M_h >= sw_sep && M_h < 7'd14)
+                  DIR <= {4'h1, 4'h3, SELEC_COL};
+                  
+                          /*FORMATO*/                  
+    /*parameter F2_h = 7'd14; parameter O6_h = 7'd15; parameter R9_h = 7'd16; parameter M4_h = 7'd17; parameter A8_h = 7'd18;
+    parameter T3_h = 7'd19; parameter O7_h = 7'd20;*/
+                          
+                else if (M_h >= F2_h && M_h < O6_h)
+                  DIR <= {F, SELEC_COL};
+                  
+                else if (M_h >= O6_h && M_h < R9_h)
+                  DIR <= {O, SELEC_COL};
+                  
+                else if (M_h >= R9_h && M_h < M4_h)
+                  DIR <= {R, SELEC_COL};
+                  
+                else if (M_h >= M4_h && M_h < A8_h)
+                  DIR <= {M, SELEC_COL};
+                  
+                else if (M_h >= A8_h && M_h < T3_h)
+                  DIR <= {A, SELEC_COL};
+                  
+                else if (M_h >= T3_h && M_h < O7_h)
+                  DIR <= {T, SELEC_COL};
+                  
+                else if (M_h >= O7_h && M_h < 7'd21)
+                  DIR <= {O, SELEC_COL};
+                  
+                           /*HORA*/
+     /*parameter H3_h = 7'd22; parameter O8_h = 7'd23; parameter R10_h = 7'd24; parameter A9_h = 7'd25;*/
+     
+                else if (M_h >= H3_h && M_h < O8_h)
+                   DIR <= {H, SELEC_COL};
+                else if (M_h >= O8_h && M_h < R10_h)
+                   DIR <= {O, SELEC_COL};
+                else if (M_h >= R10_h && M_h < A9_h)
+                   DIR <= {R, SELEC_COL};
+                else if (M_h >= A9_h && M_h < 7'd26)
+                   DIR <= {A, SELEC_COL};
+                else
+                   DIR <= 12'h000; 
+                 end            
             else
                 DIR <= 12'h000;
                           
            end
     
-    end
+           end
     
-                           assign DIR8x8 [11:0]= DIR;                     
+                       assign DIR8x8 = DIR;                     
                  
 endmodule
