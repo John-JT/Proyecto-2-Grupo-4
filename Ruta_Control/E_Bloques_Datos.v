@@ -14,7 +14,6 @@ module E_Bloques_Datos(
     output wire enable_cont_MS,
     output wire enable_cont_fecha,
     output wire enable_cont_hora,
-    output wire enable_cont_crono,
     // Inter-modular
     input wire [3:0] Selec_Mux_DDw 
     );
@@ -25,13 +24,11 @@ module E_Bloques_Datos(
     reg enable_cont_Ir;     
     reg enable_cont_MSr;
     reg enable_cont_fechar;
-    reg enable_cont_horar;
-    reg enable_cont_cronor;    
+    reg enable_cont_horar;  
     assign enable_cont_I = enable_cont_Ir; 
     assign enable_cont_MS = enable_cont_MSr;
     assign enable_cont_fecha = enable_cont_fechar;
     assign enable_cont_hora = enable_cont_horar;
-    assign enable_cont_crono = enable_cont_cronor;
     
     
     
@@ -45,7 +42,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b0;
                 enable_cont_horar = 1'b0;
-                enable_cont_cronor = 1'b0;
             end
             4'b0001:
             begin
@@ -53,7 +49,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b1;
                 enable_cont_fechar = 1'b0;
                 enable_cont_horar = 1'b0;
-                enable_cont_cronor = 1'b0;
             end
             4'b0010:
             begin
@@ -61,7 +56,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b0;
                 enable_cont_horar = 1'b0;
-                enable_cont_cronor = 1'b0;
             end
             4'b0011:
             begin
@@ -69,7 +63,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b1;
                 enable_cont_horar = 1'b0;
-                enable_cont_cronor = 1'b0;
             end
             4'b0100:
             begin
@@ -77,7 +70,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b1;
                 enable_cont_horar = 1'b0;
-                enable_cont_cronor = 1'b0;
             end
             4'b0101:
             begin
@@ -85,7 +77,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b1;
                 enable_cont_horar = 1'b0;
-                enable_cont_cronor = 1'b0;
             end
             4'b0110:
             begin
@@ -93,7 +84,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b0;
                 enable_cont_horar = 1'b1;
-                enable_cont_cronor = 1'b0;
             end
             4'b0111:
             begin
@@ -101,7 +91,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b0;
                 enable_cont_horar = 1'b1;
-                enable_cont_cronor = 1'b0;
             end
             4'b1000:
             begin
@@ -109,7 +98,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b0;
                 enable_cont_horar = 1'b1;
-                enable_cont_cronor = 1'b0;
             end
             4'b1001:
             begin
@@ -117,7 +105,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b0;
                 enable_cont_horar = 1'b0;
-                enable_cont_cronor = 1'b1;
             end
             4'b1010:
             begin
@@ -125,7 +112,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b0;
                 enable_cont_horar = 1'b0;
-                enable_cont_cronor = 1'b1;
             end
             4'b1011:
             begin
@@ -133,7 +119,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b0;
                 enable_cont_horar = 1'b0;
-                enable_cont_cronor = 1'b1;
             end
             4'b1100:
             begin
@@ -141,7 +126,6 @@ module E_Bloques_Datos(
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b0;
                 enable_cont_horar = 1'b0;
-                enable_cont_cronor = 1'b0;
             end
             4'b1101:
             begin
@@ -149,7 +133,6 @@ module E_Bloques_Datos(
                enable_cont_MSr = 1'b0;
                enable_cont_fechar = 1'b0;
                enable_cont_horar = 1'b0;
-               enable_cont_cronor = 1'b0;
             end
             4'b1110:
             begin
@@ -157,7 +140,6 @@ module E_Bloques_Datos(
                enable_cont_MSr = 1'b0;
                enable_cont_fechar = 1'b0;
                enable_cont_horar = 1'b0;
-               enable_cont_cronor = 1'b0;
             end
             4'b1111:
             begin
@@ -165,7 +147,6 @@ module E_Bloques_Datos(
                enable_cont_MSr = 1'b0;
                enable_cont_fechar = 1'b0;
                enable_cont_horar = 1'b0;
-               enable_cont_cronor = 1'b0;
             end
             default:
             begin
@@ -173,7 +154,6 @@ module E_Bloques_Datos(
                enable_cont_MSr = 1'b0;
                enable_cont_fechar = 1'b0;
                enable_cont_horar = 1'b0;
-               enable_cont_cronor = 1'b0;
             end
         endcase
     end
