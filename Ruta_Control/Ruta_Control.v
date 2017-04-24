@@ -9,6 +9,8 @@
 
 
 module Ruta_Control(
+    output PULSE,
+    output wire [2:0] psi, 
     // Entradas
     input reloj,                    // General
     input resetM,
@@ -18,8 +20,6 @@ module Ruta_Control(
     input wire P_CRONO,
     input wire A_A,
     input wire [23:0] alarma,
-    input wire enable_status_crono,
-    input wire enable_status_fh,
     input wire F_H,
     input wire R_RTC,
     input wire [7:0] Inicie,        // Mux Demux
@@ -53,8 +53,7 @@ module Ruta_Control(
     output wire enable_cont_I,      // Enables Bloques Datos     
     output wire enable_cont_MS,
     output wire enable_cont_fecha,
-    output wire enable_cont_hora,
-    output wire enable_cont_crono
+    output wire enable_cont_hora
     );
     
     
@@ -94,6 +93,8 @@ module Ruta_Control(
                          
      // Maq Control General 
      Maq_Control_General inst_Maq_Control_General(
+                          .PULSE(PULSE),
+                          .psi(psi),
                          // Ruta Control General
                          .reloj(reloj),
                          .resetM(resetM),
@@ -102,8 +103,7 @@ module Ruta_Control(
                          .P_CRONO(P_CRONO),
                          .A_A(A_A),
                          .alarma(alarma),
-                         .enable_status_crono(enable_status_crono),
-                         .enable_status_fh(enable_status_fh),
+                         
                          .F_H(F_H),
                          .R_RTC(R_RTC),
                          .Control(Control),
@@ -159,7 +159,6 @@ module Ruta_Control(
                         .enable_cont_MS(enable_cont_MS),
                         .enable_cont_fecha(enable_cont_fecha),
                         .enable_cont_hora(enable_cont_hora),
-                        .enable_cont_crono(enable_cont_crono),
                         // Inter-modular
                         .Selec_Mux_DDw(Selec_Mux_DDw)
                         );
