@@ -7,7 +7,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Maq_Control_General_tb(          //correr 500ns
+module Maq_Control_General_tb(          //correr 1500ns
                             );
         // Ruta Control General
         reg reloj;
@@ -17,8 +17,6 @@ module Maq_Control_General_tb(          //correr 500ns
         wire P_CRONO;
         wire A_A;
         wire [23:0] alarma;
-        wire enable_status_crono;
-        wire enable_status_fh;
         wire F_H;
         wire R_RTC;
         wire [1:0] Control;
@@ -40,8 +38,6 @@ module Maq_Control_General_tb(          //correr 500ns
                                         .P_CRONO(P_CRONO),
                                         .A_A(A_A),
                                         .alarma(alarma),
-                                        .enable_status_crono(enable_status_crono),
-                                        .enable_status_fh(enable_status_fh),
                                         .F_H(F_H),
                                         .R_RTC(R_RTC),
                                         .Control(Control),
@@ -60,8 +56,6 @@ module Maq_Control_General_tb(          //correr 500ns
     reg P_CRONOr;
     reg A_Ar;
     reg [23:0] alarmar;
-    reg enable_status_cronor;
-    reg enable_status_fhr;
     reg F_Hr;
     reg R_RTCr;
     assign P_FECHA = P_FECHAr;
@@ -69,8 +63,6 @@ module Maq_Control_General_tb(          //correr 500ns
     assign P_HORA = P_HORAr;
     assign A_A = A_Ar;
     assign alarma = alarmar;
-    assign enable_status_crono = enable_status_cronor;
-    assign enable_status_fh = enable_status_fhr;
     assign F_H = F_Hr;
     assign R_RTC = R_RTCr;
     
@@ -85,36 +77,21 @@ module Maq_Control_General_tb(          //correr 500ns
     P_HORAr <= 1'b0;
     P_CRONOr <= 1'b0;
     A_Ar <= 1'b0;
-    enable_status_cronor <= 1'b1;
     alarmar <= 24'h000000;
     F_Hr <= 1'b0;
-    enable_status_fhr <= 1'b0;
     R_RTCr <= 1'b0;
     
-    #50
+    #100
     resetM <= 1'b0;
     
-    #80
-    P_FECHAr <= 1'b1;
+    #400
+    P_CRONOr <= 1'b1;
     
-    #50
-    F_Hr <= 1'b1;
+    #400
+    alarmar <= 24'h110001;
     
-    #50
-    R_RTCr <= 1'b1;
-    
-    #50
-    P_FECHAr <= 1'b0;
-    F_Hr <= 1'b0;
-    R_RTCr <= 1'b0;
-    
-    
-    
-    #50
-    A_Ar <= 1'b1;
-    
-    #50
-    enable_status_cronor <= 1'b0;
+    #400
+    P_CRONOr <= 1'b0;
     end
     
     
