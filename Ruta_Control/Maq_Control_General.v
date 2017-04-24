@@ -9,6 +9,8 @@
 
 
 module Maq_Control_General(
+    output wire PULSE,
+    output wire [2:0] psi,
     // Ruta Control General
     input reloj,
     input resetM,
@@ -17,8 +19,7 @@ module Maq_Control_General(
     input wire P_CRONO,
     input wire A_A,
     input wire [23:0] alarma,
-    input wire enable_status_crono,
-    input wire enable_status_fh,
+
     input wire F_H,
     input wire R_RTC,
     output wire [1:0] Control,
@@ -32,70 +33,101 @@ module Maq_Control_General(
     
     
     //---INICIALIZACION/DEFINICION DE VARIABLES PARA LA MAQUINA---
-    // Def. para la entrada de la maquina de estados de control general
-    wire OR_alarma = alarma[0] | alarma[1] | alarma[2] | alarma[3] | alarma[4] | alarma[5] | alarma[6] | alarma[7] | alarma[8] | alarma[9] | alarma[10] | alarma[11] | alarma[12] | alarma[13] | alarma[14] | alarma[15] | alarma[16] | alarma[17] | alarma[18]| alarma[19]| alarma[20]| alarma[21]| alarma[22]| alarma[23];       
+    // Variables para Status
+    wire OR_alarma = alarma[0] | alarma[1] | alarma[2] | alarma[3]  | alarma[4] | alarma[5] | alarma[6] | alarma[7] | alarma[8] | alarma[9] | alarma[10] | alarma[11] | alarma[12] | alarma[13] | alarma[14] | alarma[15] | alarma[16] | alarma[17] | alarma[18]| alarma[19]| alarma[20]| alarma[21]| alarma[22]| alarma[23];       
     wire [1:0] alarmax = {P_CRONO,OR_alarma};
-    reg A_Areg;
-    reg F_Hreg;
-    reg act_cronoregaux;
-    assign act_crono = act_cronoregaux;
-    reg act_cronoreg;
+    reg A_Aaux;
+    reg A_Areg = 1'b0;
+    reg F_Haux ;
+    reg F_Hreg = 1'b0;
+    reg act_cronoaux;
+    reg act_cronoreg = 1'b0;
+    assign act_crono = act_cronoaux;
     
+    parameter ANCHO_PULSO = 31;
+    reg [4:0] cont_status = 5'b00000; 
+    wire reset_status = (resetM | cont_status == ANCHO_PULSO);
+    reg pulse_status = 1'b0;
+    
+   
+    // Logica para Status
     always @(posedge reloj)
     begin
         if (resetM)
-            begin
-            A_Areg <= 0;
-            F_Hreg <= 0;
-            end
+            A_Aaux <= 1'b0;
         else
-            begin
-            if (enable_status_crono == A_A)
-                A_Areg <= A_A;
-            else
-                A_Areg <= 1'b0;
-            
-            if (enable_status_fh != F_H)    
-                F_Hreg <= F_H;
-            else
-                F_Hreg <= 1'b0; 
-            end
+            A_Aaux <= A_A;
     end
     
     always @(posedge reloj)
     begin
         if (resetM)
-            act_cronoregaux <= 1'b0;
+            F_Haux <= 1'b0;
+        else
+            F_Haux <= F_H;
+    end
+    
+    always @(posedge reloj)
+    begin
+        if (resetM)
+            act_cronoaux <= 1'b0;
         else 
         begin
             case (alarmax)
                  2'b00: 
-                 act_cronoregaux <= 1'b0;
+                 act_cronoaux <= 1'b0;
                  2'b01: 
-                 act_cronoregaux <= 1'b1;
+                 act_cronoaux <= 1'b1;
                  2'b10: 
-                 act_cronoregaux <= 1'b0;
+                 act_cronoaux <= 1'b0;
                  2'b11: 
-                 act_cronoregaux <= 1'b0;
+                 act_cronoaux <= 1'b0;
             endcase
         end
-    end    
+    end      
+    
+    always @(posedge A_Aaux, posedge reset_status)
+    begin
+        if (reset_status)
+            A_Areg <= 1'b0;
+        else
+            A_Areg <= 1'b1;
+    end
+
+    always @(posedge F_Haux, posedge reset_status)
+    begin
+        if (reset_status)
+            F_Hreg <= 1'b0;
+        else
+            F_Hreg <= 1'b1;
+    end
+
+    always @(posedge act_cronoaux, posedge reset_status)
+    begin
+        if (reset_status)
+            act_cronoreg <= 1'b0;
+        else
+            act_cronoreg <= 1'b1;
+    end
     
     always @(posedge reloj)
     begin
-        if (resetM)
-            act_cronoreg <= 1'b0;
-        else
-            if (act_cronoregaux != enable_status_crono)
-                act_cronoreg <= act_cronoregaux;
-            else
-                act_cronoreg <= 1'b0;
+        pulse_status <= A_Areg | F_Hreg | act_cronoreg;
+    end 
+    
+    always @ (posedge reloj, posedge reset_status) 
+    begin
+                 if(reset_status) 
+                    cont_status <= 5'b00000;
+                 else
+                    if(pulse_status)
+                        cont_status <= cont_status + 5'b00001;
     end
-    
+        
+   // Defs para la entrada de la maquina
     wire Progra = (P_FECHA | P_HORA | P_CRONO);   
-    wire Status = (A_Areg | F_Hreg | act_cronoreg);             
+    //wire Status = pulse_status;             
     wire Iniciar = R_RTC;
-    
     assign Status3bit = {A_Areg, F_Hreg, act_cronoreg};     
     
     // Def. de entrada directa de la maquina de estados de control general    
@@ -105,18 +137,21 @@ module Maq_Control_General(
         if (resetM)
             PSI <= 3'b000;
         else 
-            PSI <= {Progra,Status,Iniciar};
+          //  PSI <= {Progra,Status,Iniciar};
+          PSI <= {Progra,pulse_status,Iniciar};
+
     end
+    assign psi = PSI;
         
     // Enable de sincronizacion
     reg pulse = 1'b0;
     assign sync = pulse;
-    parameter PULSE_WIDTH = 1;
-    reg [4:0] count = 0;
-    reg pulse1 = 0;
-    reg pulse2 = 0;
-    reg pulse3 = 0;
-    reg pulse4 = 0;
+    parameter PULSE_WIDTH = 10;
+    reg [4:0] count = 5'b00000;
+    reg pulse1 = 1'b0;
+    reg pulse2 = 1'b0;
+    reg pulse3 = 1'b0;
+    reg pulse4 = 1'b0;
     wire count_rst = resetM | (count == PULSE_WIDTH);
     
     
@@ -140,82 +175,58 @@ module Maq_Control_General(
              case (Controlreg)
                 I: 
                 begin
-                   if (PSI == 3'b000)
-                      Controlreg <= L;
-                   else if (PSI == 3'b001)
-                      Controlreg <= I;
-                   else if (PSI == 3'b010)
-                      Controlreg <= M_S;                              
-                   else if (PSI == 3'b011)
-                      Controlreg <= I;  
-                   else if (PSI == 3'b100)
-                      Controlreg <= E;
-                   else if (PSI == 3'b101)
-                      Controlreg <= I;  
-                   else if (PSI == 3'b110)
-                      Controlreg <= M_S; 
-                   else if (PSI == 3'b111)
-                      Controlreg <= I; 
+                 case(PSI)           
+                   3'b000: Controlreg <= L;
+                   3'b001: Controlreg <= I;
+                   3'b010: Controlreg <= M_S;
+                   3'b011: Controlreg <= I;
+                   3'b100: Controlreg <= E;
+                   3'b101: Controlreg <= I;
+                   3'b110: Controlreg <= M_S;
+                   3'b111: Controlreg <= I;
+                   endcase
                 end
                 
                 L: 
                 begin
-                   if (PSI == 3'b000)
-                      Controlreg <= L;
-                   else if (PSI == 3'b001)
-                      Controlreg <= I;
-                   else if (PSI == 3'b010)
-                      Controlreg <= M_S;                              
-                   else if (PSI == 3'b011)
-                      Controlreg <= I;  
-                   else if (PSI == 3'b100)
-                      Controlreg <= E;
-                   else if (PSI == 3'b101)
-                      Controlreg <= I;  
-                   else if (PSI == 3'b110)
-                      Controlreg <= M_S; 
-                   else if (PSI == 3'b111)
-                      Controlreg <= I; 
+                 case(PSI)           
+                 3'b000: Controlreg <= L;
+                 3'b001: Controlreg <= I;
+                 3'b010: Controlreg <= M_S;
+                 3'b011: Controlreg <= I;
+                 3'b100: Controlreg <= E;
+                 3'b101: Controlreg <= I;
+                 3'b110: Controlreg <= M_S;
+                 3'b111: Controlreg <= I;
+                   endcase
                 end
                 
-                E: 
+                E:
                 begin
-                   if (PSI == 3'b000)
-                      Controlreg <= L;
-                   else if (PSI == 3'b001)
-                      Controlreg <= I;
-                   else if (PSI == 3'b010)
-                      Controlreg <= M_S;                              
-                   else if (PSI == 3'b011)
-                      Controlreg <= I;  
-                   else if (PSI == 3'b100)
-                      Controlreg <= E;
-                   else if (PSI == 3'b101)
-                      Controlreg <= I;  
-                   else if (PSI == 3'b110)
-                      Controlreg <= M_S; 
-                   else if (PSI == 3'b111)
-                      Controlreg <= I; 
+                 case(PSI)           
+                 3'b000: Controlreg <= L;
+                 3'b001: Controlreg <= I;
+                 3'b010: Controlreg <= M_S;
+                 3'b011: Controlreg <= I;
+                 3'b100: Controlreg <= E;
+                 3'b101: Controlreg <= I;
+                 3'b110: Controlreg <= M_S;
+                 3'b111: Controlreg <= I;
+                   endcase
                 end
                 
-                M_S: 
+                M_S:
                 begin
-                   if (PSI == 3'b000)
-                      Controlreg <= L;
-                   else if (PSI == 3'b001)
-                      Controlreg <= I;
-                   else if (PSI == 3'b010)
-                      Controlreg <= M_S;                              
-                   else if (PSI == 3'b011)
-                      Controlreg <= I;  
-                   else if (PSI == 3'b100)
-                      Controlreg <= E;
-                   else if (PSI == 3'b101)
-                      Controlreg <= I;  
-                   else if (PSI == 3'b110)
-                      Controlreg <= M_S; 
-                   else if (PSI == 3'b111)
-                      Controlreg <= I; 
+                 case(PSI)           
+                 3'b000: Controlreg <= L;
+                 3'b001: Controlreg <= I;
+                 3'b010: Controlreg <= M_S;
+                 3'b011: Controlreg <= I;
+                 3'b100: Controlreg <= E;
+                 3'b101: Controlreg <= I;
+                 3'b110: Controlreg <= M_S;
+                 3'b111: Controlreg <= I;
+                   endcase
                 end
                 
                 default :  // Fault Recovery
@@ -296,4 +307,5 @@ module Maq_Control_General(
                      end
              end
      end
+    assign PULSE = pulse;
     endmodule
