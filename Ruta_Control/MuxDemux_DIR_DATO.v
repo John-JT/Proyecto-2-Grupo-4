@@ -96,29 +96,28 @@ module MuxDemux_DIR_DATO(
           
     //---LOGICA MUX Y DEMUX DE LA SALIDA Y ENTRADA DEL BUS DIR_DATO--- 
     // Mux salida de DIR_DATO
-       always @(Selec_Mux_DDr, Inicie, Mod_S, Transf, OUT_diaf, OUT_mesf, OUT_anof, OUT_segh, OUT_minh, 
-       OUT_horah, OUT_segcr, OUT_mincr, OUT_horacr, Zero)
+       always @(posedge reloj)
        begin
        case (Selec_Mux_DDr)
-          4'b0000: DIR_DATO_OUTr = Inicie;
-          4'b0001: DIR_DATO_OUTr = Mod_S;
-          4'b0010: DIR_DATO_OUTr = Transf;
-          4'b0011: DIR_DATO_OUTr = OUT_diaf;
-          4'b0100: DIR_DATO_OUTr = OUT_mesf;
-          4'b0101: DIR_DATO_OUTr = OUT_anof;
-          4'b0110: DIR_DATO_OUTr = OUT_segh;
-          4'b0111: DIR_DATO_OUTr = OUT_minh;
-          4'b1000: DIR_DATO_OUTr = OUT_horah;
-          4'b1001: DIR_DATO_OUTr = OUT_segcr;
-          4'b1010: DIR_DATO_OUTr = OUT_mincr;
-          4'b1011: DIR_DATO_OUTr = OUT_horacr;
-          4'b1100: DIR_DATO_OUTr = Transf;
-          4'b1101: DIR_DATO_OUTr = Zero;
-          4'b1110: DIR_DATO_OUTr = Zero;
-          4'b1111: DIR_DATO_OUTr = Zero;
+          4'b0000: DIR_DATO_OUTr <= Inicie;
+          4'b0001: DIR_DATO_OUTr <= Mod_S;
+          4'b0010: DIR_DATO_OUTr <= Transf;
+          4'b0011: DIR_DATO_OUTr <= OUT_diaf;
+          4'b0100: DIR_DATO_OUTr <= OUT_mesf;
+          4'b0101: DIR_DATO_OUTr <= OUT_anof;
+          4'b0110: DIR_DATO_OUTr <= OUT_segh;
+          4'b0111: DIR_DATO_OUTr <= OUT_minh;
+          4'b1000: DIR_DATO_OUTr <= OUT_horah;
+          4'b1001: DIR_DATO_OUTr <= OUT_segcr;
+          4'b1010: DIR_DATO_OUTr <= OUT_mincr;
+          4'b1011: DIR_DATO_OUTr <= OUT_horacr;
+          4'b1100: DIR_DATO_OUTr <= Transf;
+          4'b1101: DIR_DATO_OUTr <= Zero;
+          4'b1110: DIR_DATO_OUTr <= Zero;
+          4'b1111: DIR_DATO_OUTr <= Zero;
           default:
             begin
-                DIR_DATO_OUTr = Zero;
+                DIR_DATO_OUTr <= Zero;
             end
        endcase
        end
@@ -152,44 +151,44 @@ module MuxDemux_DIR_DATO(
                         cont2aux <= cont2aux;
            end
                 // cont 2
-        always @(cont2aux)
+        always @(posedge reloj)
            begin
                 case (cont2aux)
-                    5'b00000: cont2 = 4'b0011;
-                    5'b00001: cont2 = 4'b0100;
-                    5'b00010: cont2 = 4'b0101;
-                    5'b00011: cont2 = 4'b0110;
-                    5'b00100: cont2 = 4'b0111;
-                    5'b00101: cont2 = 4'b1000;
-                    5'b00110: cont2 = 4'b1001;
-                    5'b00111: cont2 = 4'b1010;
-                    5'b01000: cont2 = 4'b1011;
-                    5'b01001: cont2 = 4'b1100;
-                    5'b01010: cont2 = 4'b0010;
-                    5'b01011: cont2 = 4'b0011;
-                    5'b01100: cont2 = 4'b0100;
-                    5'b01101: cont2 = 4'b0101;
-                    5'b01110: cont2 = 4'b0110;
-                    5'b01111: cont2 = 4'b0111;
-                    5'b10000: cont2 = 4'b1000;
-                    5'b10001: cont2 = 4'b1001;
-                    5'b10010: cont2 = 4'b1010;
-                    5'b10011: cont2 = 4'b1011;  // fin, 20 datos...
-                    5'b10100: cont2 = 4'b0011;      
-                    5'b10101: cont2 = 4'b0011;   
-                    5'b10110: cont2 = 4'b0011; 
-                    5'b10111: cont2 = 4'b0011; 
-                    5'b11000: cont2 = 4'b0011; 
-                    5'b11001: cont2 = 4'b0011; 
-                    5'b11010: cont2 = 4'b0011; 
-                    5'b11011: cont2 = 4'b0011; 
-                    5'b11100: cont2 = 4'b0011; 
-                    5'b11101: cont2 = 4'b0011; 
-                    5'b11110: cont2 = 4'b0011; 
-                    5'b11111: cont2 = 4'b0011;     
+                    5'b00000: cont2 <= 4'b0011;
+                    5'b00001: cont2 <= 4'b0100;
+                    5'b00010: cont2 <= 4'b0101;
+                    5'b00011: cont2 <= 4'b0110;
+                    5'b00100: cont2 <= 4'b0111;
+                    5'b00101: cont2 <= 4'b1000;
+                    5'b00110: cont2 <= 4'b1001;
+                    5'b00111: cont2 <= 4'b1010;
+                    5'b01000: cont2 <= 4'b1011;
+                    5'b01001: cont2 <= 4'b1100;
+                    5'b01010: cont2 <= 4'b0010;
+                    5'b01011: cont2 <= 4'b0011;
+                    5'b01100: cont2 <= 4'b0100;
+                    5'b01101: cont2 <= 4'b0101;
+                    5'b01110: cont2 <= 4'b0110;
+                    5'b01111: cont2 <= 4'b0111;
+                    5'b10000: cont2 <= 4'b1000;
+                    5'b10001: cont2 <= 4'b1001;
+                    5'b10010: cont2 <=4'b1010;
+                    5'b10011: cont2 <=4'b1011;  // fin, 20 datos...
+                    5'b10100: cont2 <=4'b0011;      
+                    5'b10101: cont2 <=4'b0011;   
+                    5'b10110: cont2 <=4'b0011; 
+                    5'b10111: cont2 <=4'b0011; 
+                    5'b11000: cont2 <=4'b0011; 
+                    5'b11001: cont2 <=4'b0011; 
+                    5'b11010: cont2 <=4'b0011; 
+                    5'b11011: cont2 <=4'b0011; 
+                    5'b11100: cont2 <=4'b0011; 
+                    5'b11101: cont2 <=4'b0011; 
+                    5'b11110: cont2 <=4'b0011; 
+                    5'b11111: cont2 <= 4'b0011;     
                     default :
                         begin
-                            cont2 = 4'b0011;
+                            cont2 <= 4'b0011;
                         end
                     endcase
            end
@@ -207,44 +206,44 @@ module MuxDemux_DIR_DATO(
                    cont3aux <= cont3aux;
         end
                 // cont 3   
-        always @(cont3aux)
+        always @(posedge reloj)
         begin
              case (cont3aux)
-                 5'b00000: cont3 = 4'b0011;
-                 5'b00001: cont3 = 4'b0100;
-                 5'b00010: cont3 = 4'b0101;
-                 5'b00011: cont3 = 4'b0110;
-                 5'b00100: cont3 = 4'b0111;
-                 5'b00101: cont3 = 4'b1000;
-                 5'b00110: cont3 = 4'b1100;
-                 5'b00111: cont3 = 4'b0010;
-                 5'b01000: cont3 = 4'b0011;
-                 5'b01001: cont3 = 4'b0100;
-                 5'b01010: cont3 = 4'b0101;
-                 5'b01011: cont3 = 4'b0110;
-                 5'b01100: cont3 = 4'b0111;
-                 5'b01101: cont3 = 4'b1000;
-                 5'b01110: cont3 = 4'b1001;
-                 5'b01111: cont3 = 4'b1010;
-                 5'b10000: cont3 = 4'b1011;    // fin, 17 datos... 
-                 5'b10001: cont3 = 4'b0011;
-                 5'b10010: cont3 = 4'b0011;
-                 5'b10011: cont3 = 4'b0011;
-                 5'b10100: cont3 = 4'b0011;      
-                 5'b10101: cont3 = 4'b0011;   
-                 5'b10110: cont3 = 4'b0011; 
-                 5'b10111: cont3 = 4'b0011; 
-                 5'b11000: cont3 = 4'b0011; 
-                 5'b11001: cont3 = 4'b0011; 
-                 5'b11010: cont3 = 4'b0011; 
-                 5'b11011: cont3 = 4'b0011; 
-                 5'b11100: cont3 = 4'b0011; 
-                 5'b11101: cont3 = 4'b0011; 
-                 5'b11110: cont3 = 4'b0011; 
-                 5'b11111: cont3 = 4'b0011;           
+                 5'b00000: cont3 <=4'b0011;
+                 5'b00001: cont3 <=4'b0100;
+                 5'b00010: cont3 <=4'b0101;
+                 5'b00011: cont3 <=4'b0110;
+                 5'b00100: cont3 <=4'b0111;
+                 5'b00101: cont3 <=4'b1000;
+                 5'b00110: cont3 <=4'b1100;
+                 5'b00111: cont3 <=4'b0010;
+                 5'b01000: cont3 <=4'b0011;
+                 5'b01001: cont3 <=4'b0100;
+                 5'b01010: cont3 <=4'b0101;
+                 5'b01011: cont3 <=4'b0110;
+                 5'b01100: cont3 <=4'b0111;
+                 5'b01101: cont3 <=4'b1000;
+                 5'b01110: cont3 <=4'b1001;
+                 5'b01111: cont3 <=4'b1010;
+                 5'b10000: cont3 <=4'b1011;    // fin, 17 datos... 
+                 5'b10001: cont3 <=4'b0011;
+                 5'b10010: cont3 <=4'b0011;
+                 5'b10011: cont3 <=4'b0011;
+                 5'b10100: cont3 <=4'b0011;      
+                 5'b10101: cont3 <=4'b0011;   
+                 5'b10110: cont3 <=4'b0011; 
+                 5'b10111: cont3 <=4'b0011; 
+                 5'b11000: cont3 <=4'b0011; 
+                 5'b11001: cont3 <=4'b0011; 
+                 5'b11010: cont3 <=4'b0011; 
+                 5'b11011: cont3 <=4'b0011; 
+                 5'b11100: cont3 <=4'b0011; 
+                 5'b11101: cont3 <=4'b0011; 
+                 5'b11110: cont3 <=4'b0011; 
+                 5'b11111: cont3 <=4'b0011;           
                  default :
                      begin
-                         cont2 = 4'b0011;
+                         cont2 <= 4'b0011;
                      end
                  endcase
         end                
@@ -263,298 +262,298 @@ module MuxDemux_DIR_DATO(
            end    
             
             // Mux para el valor de  sel_cont_sel_mux
-      always @(Control, Status3bit)
+      always @(posedge reloj)
       begin
            case(Control)
                2'b00:
                    begin
-                       sel_cont_sel_mux = 3'b000;
+                       sel_cont_sel_mux <= 3'b000;
                    end
                2'b01:
                    begin
-                       sel_cont_sel_mux = 3'b001;
+                       sel_cont_sel_mux <= 3'b001;
                    end
                2'b10:
                    begin
                        if (Status3bit == 3'b000 | Status3bit == 3'b010 | Status3bit == 3'b100 | Status3bit == 3'b101 | Status3bit == 3'b110 | Status3bit == 3'b111)
-                           sel_cont_sel_mux = 3'b010;
+                           sel_cont_sel_mux <= 3'b010;
                        else
-                           sel_cont_sel_mux = 3'b011;
+                           sel_cont_sel_mux <= 3'b011;
                    end    
                2'b11:
                    begin
-                       sel_cont_sel_mux = 3'b100;
+                       sel_cont_sel_mux <= 3'b100;
                    end    
            endcase
       end
       
             // Mux que selecciona el contador que estara en Selec_Mux_DD
-          always @(sel_cont_sel_mux, cont1, cont2, cont3, cont4)
+          always @(posedge reloj)
           begin
                case(sel_cont_sel_mux)
                    3'b000:
-                       Selec_Mux_DDr = 4'b0000;
+                       Selec_Mux_DDr <= 4'b0000;
                    3'b001:
-                       Selec_Mux_DDr = cont1;
+                       Selec_Mux_DDr <= cont1;
                    3'b010:
-                       Selec_Mux_DDr = cont2;
+                       Selec_Mux_DDr <= cont2;
                    3'b011:
-                       Selec_Mux_DDr = cont3;
+                       Selec_Mux_DDr <= cont3;
                    3'b100:
-                       Selec_Mux_DDr = cont4;
+                       Selec_Mux_DDr <= cont4;
                    default :  
                    begin 
-                       Selec_Mux_DDr = 4'b0000;
+                       Selec_Mux_DDr <= 4'b0000;
                    end
                endcase
           end
           
     //-----------------------------------------------------------------------------------------------------------------  
     // Demux entrada de DIR_DATO
-         always @(Selec_Demux_DDr, DIR_DATO_INr)
+         always @(posedge reloj)
          begin
               case(Selec_Demux_DDr)
                         4'b0000: 
                           begin
-                              IN_diafreg = DIR_DATO_INr;
-                              IN_mesfreg = 8'b00000000;   
-                              IN_anofreg = 8'b00000000;    
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;   
+                              IN_diafreg <=DIR_DATO_INr;
+                              IN_mesfreg <=8'b00000000;   
+                              IN_anofreg <=8'b00000000;    
+                              IN_seghreg <=8'b00000000;    
+                              IN_minhreg <=8'b00000000;    
+                              IN_horahreg <=8'b00000000;   
+                              IN_segcrreg <=8'b00000000;   
+                              IN_mincrreg <=8'b00000000;      
+                              IN_horacrreg <= 8'b00000000;   
                           end
                         4'b0001: 
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = DIR_DATO_INr;  
-                              IN_anofreg = 8'b00000000;    
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;   
+                              IN_diafreg <=8'b00000000; 
+                              IN_mesfreg <=DIR_DATO_INr;  
+                              IN_anofreg <=8'b00000000;    
+                              IN_seghreg <=8'b00000000;    
+                              IN_minhreg <=8'b00000000;    
+                              IN_horahreg <=8'b00000000;   
+                              IN_segcrreg <=8'b00000000;   
+                              IN_mincrreg <=8'b00000000;      
+                              IN_horacrreg <= 8'b00000000;   
                           end
                         4'b0010: 
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = DIR_DATO_INr;    
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000; 
+                              IN_diafreg <=8'b00000000; 
+                              IN_mesfreg <=8'b00000000;  
+                              IN_anofreg <=DIR_DATO_INr;    
+                              IN_seghreg <=8'b00000000;    
+                              IN_minhreg <=8'b00000000;    
+                              IN_horahreg <=8'b00000000;   
+                              IN_segcrreg <=8'b00000000;   
+                              IN_mincrreg <=8'b00000000;      
+                              IN_horacrreg <= 8'b00000000; 
                           end
                         4'b0011: 
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = DIR_DATO_INr;   
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;
+                              IN_diafreg <=8'b00000000; 
+                              IN_mesfreg <=8'b00000000;  
+                              IN_anofreg <=8'b00000000;   
+                              IN_seghreg <=DIR_DATO_INr;   
+                              IN_minhreg <=8'b00000000;    
+                              IN_horahreg <=8'b00000000;   
+                              IN_segcrreg <=8'b00000000;   
+                              IN_mincrreg <=8'b00000000;      
+                              IN_horacrreg <= 8'b00000000;
                           end
                         4'b0100:
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;  
-                              IN_minhreg = DIR_DATO_INr;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;
+                              IN_diafreg <=8'b00000000; 
+                              IN_mesfreg <=8'b00000000;  
+                              IN_anofreg <=8'b00000000;   
+                              IN_seghreg <=8'b00000000;  
+                              IN_minhreg <=DIR_DATO_INr;    
+                              IN_horahreg <= 8'b00000000;   
+                              IN_segcrreg <=8'b00000000;   
+                              IN_mincrreg <=8'b00000000;      
+                              IN_horacrreg <= 8'b00000000;
                           end 
                         4'b0101: 
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = DIR_DATO_INr;
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;
+                              IN_diafreg <=8'b00000000; 
+                              IN_mesfreg <=8'b00000000;  
+                              IN_anofreg <=8'b00000000;   
+                              IN_seghreg <=8'b00000000;    
+                              IN_minhreg <=8'b00000000;    
+                              IN_horahreg <=DIR_DATO_INr;
+                              IN_segcrreg <=8'b00000000;   
+                              IN_mincrreg <= 8'b00000000;      
+                              IN_horacrreg <= 8'b00000000;
                           end
                         4'b0110:
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = DIR_DATO_INr;  
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;
+                              IN_diafreg <=8'b00000000; 
+                              IN_mesfreg <=8'b00000000;  
+                              IN_anofreg <=8'b00000000;   
+                              IN_seghreg <=8'b00000000;    
+                              IN_minhreg <=8'b00000000;    
+                              IN_horahreg <=8'b00000000;   
+                              IN_segcrreg <=DIR_DATO_INr;  
+                              IN_mincrreg <=8'b00000000;      
+                              IN_horacrreg <= 8'b00000000;
                           end 
                         4'b0111:
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = DIR_DATO_INr;    
-                              IN_horacrreg = 8'b00000000;
+                              IN_diafreg <=8'b00000000; 
+                              IN_mesfreg <=8'b00000000;  
+                              IN_anofreg <=8'b00000000;   
+                              IN_seghreg <=8'b00000000;    
+                              IN_minhreg <=8'b00000000;    
+                              IN_horahreg <=8'b00000000;   
+                              IN_segcrreg <=8'b00000000;   
+                              IN_mincrreg <=DIR_DATO_INr;    
+                              IN_horacrreg <= 8'b00000000;
                           end 
                         4'b1000:
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = DIR_DATO_INr;  
+                              IN_diafreg <=8'b00000000; 
+                              IN_mesfreg <=8'b00000000;  
+                              IN_anofreg <=8'b00000000;   
+                              IN_seghreg <=8'b00000000;    
+                              IN_minhreg <= 8'b00000000;    
+                              IN_horahreg <= 8'b00000000;   
+                              IN_segcrreg <= 8'b00000000;   
+                              IN_mincrreg <= 8'b00000000;      
+                              IN_horacrreg <= DIR_DATO_INr;  
                           end 
                         4'b1001:
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;
+                              IN_diafreg <= 8'b00000000; 
+                              IN_mesfreg <=8'b00000000;  
+                              IN_anofreg <=8'b00000000;   
+                              IN_seghreg <=8'b00000000;    
+                              IN_minhreg <=8'b00000000;    
+                              IN_horahreg <=8'b00000000;   
+                              IN_segcrreg <=8'b00000000;   
+                              IN_mincrreg <=8'b00000000;      
+                              IN_horacrreg <= 8'b00000000;
                           end 
                         4'b1010: 
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;
+                            IN_diafreg <= 8'b00000000; 
+                            IN_mesfreg <=8'b00000000;  
+                            IN_anofreg <=8'b00000000;   
+                            IN_seghreg <=8'b00000000;    
+                            IN_minhreg <=8'b00000000;    
+                            IN_horahreg <=8'b00000000;   
+                            IN_segcrreg <=8'b00000000;   
+                            IN_mincrreg <=8'b00000000;      
+                            IN_horacrreg <= 8'b00000000;
                           end
                         4'b1011: 
                           begin 
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;
+                            IN_diafreg <= 8'b00000000; 
+                            IN_mesfreg <=8'b00000000;  
+                            IN_anofreg <=8'b00000000;   
+                            IN_seghreg <=8'b00000000;    
+                            IN_minhreg <=8'b00000000;    
+                            IN_horahreg <=8'b00000000;   
+                            IN_segcrreg <=8'b00000000;   
+                            IN_mincrreg <=8'b00000000;      
+                            IN_horacrreg <= 8'b00000000;
                           end
                         4'b1100:
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;
+                            IN_diafreg <= 8'b00000000; 
+                            IN_mesfreg <=8'b00000000;  
+                            IN_anofreg <=8'b00000000;   
+                            IN_seghreg <=8'b00000000;    
+                            IN_minhreg <=8'b00000000;    
+                            IN_horahreg <=8'b00000000;   
+                            IN_segcrreg <=8'b00000000;   
+                            IN_mincrreg <=8'b00000000;      
+                            IN_horacrreg <= 8'b00000000;
                           end 
                         4'b1101:
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;
+                            IN_diafreg <= 8'b00000000; 
+                            IN_mesfreg <=8'b00000000;  
+                            IN_anofreg <=8'b00000000;   
+                            IN_seghreg <=8'b00000000;    
+                            IN_minhreg <=8'b00000000;    
+                            IN_horahreg <=8'b00000000;   
+                            IN_segcrreg <=8'b00000000;   
+                            IN_mincrreg <=8'b00000000;      
+                            IN_horacrreg <= 8'b00000000;
                           end 
                         4'b1110:
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000;
+                            IN_diafreg <= 8'b00000000; 
+                            IN_mesfreg <=8'b00000000;  
+                            IN_anofreg <=8'b00000000;   
+                            IN_seghreg <=8'b00000000;    
+                            IN_minhreg <=8'b00000000;    
+                            IN_horahreg <=8'b00000000;   
+                            IN_segcrreg <=8'b00000000;   
+                            IN_mincrreg <=8'b00000000;      
+                            IN_horacrreg <= 8'b00000000;
                           end 
                         4'b1111:
                           begin
-                              IN_diafreg = 8'b00000000; 
-                              IN_mesfreg = 8'b00000000;  
-                              IN_anofreg = 8'b00000000;   
-                              IN_seghreg = 8'b00000000;    
-                              IN_minhreg = 8'b00000000;    
-                              IN_horahreg = 8'b00000000;   
-                              IN_segcrreg = 8'b00000000;   
-                              IN_mincrreg = 8'b00000000;      
-                              IN_horacrreg = 8'b00000000; 
+                              IN_diafreg <=8'b00000000; 
+                              IN_mesfreg <=8'b00000000;  
+                              IN_anofreg <=8'b00000000;   
+                              IN_seghreg <=8'b00000000;    
+                              IN_minhreg <=8'b00000000;    
+                              IN_horahreg <=8'b00000000;   
+                              IN_segcrreg <=8'b00000000;   
+                              IN_mincrreg <=8'b00000000;      
+                              IN_horacrreg <= 8'b00000000; 
                           end 
                         default:
                             begin
-                                IN_diafreg = 8'b00000000; 
-                                IN_mesfreg = 8'b00000000;  
-                                IN_anofreg = 8'b00000000;   
-                                IN_seghreg = 8'b00000000;    
-                                IN_minhreg = 8'b00000000;    
-                                IN_horahreg = 8'b00000000;   
-                                IN_segcrreg = 8'b00000000;   
-                                IN_mincrreg = 8'b00000000;      
-                                IN_horacrreg = 8'b00000000; 
+                                IN_diafreg <=8'b00000000; 
+                                IN_mesfreg <=8'b00000000;  
+                                IN_anofreg <=8'b00000000;   
+                                IN_seghreg <=8'b00000000;    
+                                IN_minhreg <=8'b00000000;    
+                                IN_horahreg <=8'b00000000;   
+                                IN_segcrreg <=8'b00000000;   
+                                IN_mincrreg <=8'b00000000;      
+                                IN_horacrreg <= 8'b00000000; 
                             end  
               endcase
          end
          
       // Def Selec_Demux_DD
-      always @(Control, Selec_Mux_DDr, LE)
+      always @(posedge reloj)
       begin
           case (Control)
               2'b00:
               begin
-                   Selec_Demux_DDr = 4'b1111;
+                   Selec_Demux_DDr <= 4'b1111;
               end
               
               2'b01:
               begin
                   if (Selec_Mux_DDr == 4'b0000 | Selec_Mux_DDr == 4'b0001 | Selec_Mux_DDr == 4'b0010 | Selec_Mux_DDr == 4'b1100 | Selec_Mux_DDr == 4'b1101 | Selec_Mux_DDr == 4'b1110 | Selec_Mux_DDr == 4'b1111)
-                      Selec_Demux_DDr = 4'b1111; 
+                      Selec_Demux_DDr <= 4'b1111; 
                   else
-                      Selec_Demux_DDr = Selec_Mux_DDr - 4'b0011;
+                      Selec_Demux_DDr <= Selec_Mux_DDr - 4'b0011;
               end
               
               2'b10:
               begin
                   if (LE)
                       if (Selec_Mux_DDr == 4'b0000 | Selec_Mux_DDr == 4'b0001 | Selec_Mux_DDr == 4'b0010 | Selec_Mux_DDr == 4'b1100 | Selec_Mux_DDr == 4'b1101 | Selec_Mux_DDr == 4'b1110 | Selec_Mux_DDr == 4'b1111)
-                          Selec_Demux_DDr = 4'b1111; 
+                          Selec_Demux_DDr <= 4'b1111; 
                       else
-                          Selec_Demux_DDr = Selec_Mux_DDr - 4'b0011;
+                          Selec_Demux_DDr <= Selec_Mux_DDr - 4'b0011;
                   else
-                      Selec_Demux_DDr = 4'b1111;
+                      Selec_Demux_DDr <= 4'b1111;
               end
               
               2'b11:
               begin
                   if (Selec_Mux_DDr == 4'b0000 | Selec_Mux_DDr == 4'b0001 | Selec_Mux_DDr == 4'b0010 | Selec_Mux_DDr == 4'b1100 | Selec_Mux_DDr == 4'b1101 | Selec_Mux_DDr == 4'b1110 | Selec_Mux_DDr == 4'b1111)
-                      Selec_Demux_DDr = 4'b1111; 
+                      Selec_Demux_DDr <= 4'b1111; 
                   else
-                      Selec_Demux_DDr = Selec_Mux_DDr - 4'b0011;
+                      Selec_Demux_DDr <= Selec_Mux_DDr - 4'b0011;
               end
           endcase
       end
@@ -604,61 +603,61 @@ module MuxDemux_DIR_DATO(
                 cont17x <= 5'b00000;      
     end
             // def de dir
-    always @(Control, Status3bit, Selec_Mux_DDr, cont_32, cont20x, cont17x)
+    always @(posedge reloj)
     begin
         case (Control)
             2'b00:
                 begin 
-                    dir = 1'b0;
+                    dir <= 1'b0;
                 end
             2'b01:
                  begin
                     if (cont_32 > 5'b01011)
-                        dir = 1'b1;
+                        dir <= 1'b1;
                     else
-                        dir = 1'b0;
+                        dir <= 1'b0;
                  end
             2'b10:
                 begin
                     if (Status3bit == 3'b000 | Status3bit == 3'b010 | Status3bit == 3'b100 | Status3bit == 3'b101 | Status3bit == 3'b110 | Status3bit == 3'b111)
                         if (cont20x < 5'b01010)
-                            dir = 1'b0;
+                            dir <= 1'b0;
                         else
                             if (cont_32 > 5'b01011)
-                                dir = 1'b1;
+                                dir <= 1'b1;
                             else
-                                dir = 1'b0;
+                                dir <= 1'b0;
                     else
                         if (cont17x < 5'b00110) 
-                            dir = 1'b0;
+                            dir <= 1'b0;
                         else
                            if (cont_32 > 5'b01011)
-                                dir = 1'b1;
+                                dir <= 1'b1;
                            else
-                                dir = 1'b0;   
+                                dir <= 1'b0;   
                 end
             2'b11:
                 begin
                     if (Selec_Mux_DDr == 4'b0001)
-                        dir = 1'b0;
+                        dir <= 1'b0;
                     else
                         if (cont_32 > 5'b01011)
-                            dir = 1'b1;
+                            dir <= 1'b1;
                         else
-                            dir = 1'b0;
+                            dir <= 1'b0;
                         
                 end
         endcase
     end
     // Definicion de READ
-    always @(dir, cont_32)
+    always @(posedge reloj)
     begin
         if (dir)
             if (cont_32 > 5'b11001 & cont_32 < 5'b11111)
-                READr = 1'b1;
+                READr <= 1'b1;
             else
-                READr = 1'b0;  
+                READr <= 1'b0;  
         else
-            READr = 1'b0;
+            READr <= 1'b0;
     end
 endmodule
