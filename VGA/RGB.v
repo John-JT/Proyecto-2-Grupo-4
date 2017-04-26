@@ -8,7 +8,6 @@ module RGB(
     input P_FECHA,
     input P_HORA,
     input P_CRONO,
-    input A_A,
     input H_ON,
     input V_ON,
     input [9:0] Qh,
@@ -17,10 +16,9 @@ module RGB(
     input BIT_FUENTE,
     output reg [3:0] R,
     output reg [3:0] G,
-    output reg [3:0] B/*,
-    output reg Impresion*/  
+    output reg [3:0] B
+    //output  Impresion//Para TB 
     );
-        //wire Impresion;
         wire Cam_Co;
         reg Bordeh;
         reg Bordev;
@@ -163,6 +161,8 @@ module RGB(
          
         assign Bordes = (Bordev | Bordeh | Borde1 | Borde2 | Borde3) ;
         assign COL_SEL = {Bordes, BIT_FUENTE , Cam_Co};           
-        assign col_ala ={(Bordev|Bordeh),BIT_FUENTE,cambio};
+        assign col_ala = {(Bordev|Bordeh),BIT_FUENTE,cambio};
+        
+        //assign Impresion = Bordes | BIT_FUENTE; //Para TB
                 
 endmodule

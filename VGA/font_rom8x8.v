@@ -4,7 +4,6 @@
 
 module font_rom8x8(
 input bit_alarma,
-input A_A,
 input wire [9:0]Qh,
 input wire [9:0]Qv,
 input wire resetM,
@@ -19,8 +18,6 @@ output wire BIT_FUENTE
     reg [2:0] SELEC_PX;
     
    Posicion_ROM8x8 inst_Posicion_ROM8x8(
-   //.bit_alarma(bit_alarma),
-   .A_A(A_A),
    .resetM(resetM),
    .Qh(Qh[9:3]),
    .Qv(Qv),

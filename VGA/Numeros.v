@@ -2,16 +2,17 @@
 
 module Numeros(
     input bit_alarma,
-    /*input [1:0] Contador_pos_f,
+    input [1:0] Contador_pos_f,
     input [1:0] Contador_pos_h,
-    input [1:0] Contador_pos_cr,*/
-    input A_A,
+    input [1:0] Contador_pos_cr,
+    input P_FECHA,
+    input P_HORA,
     input P_CRONO,
-    //input [23:0] ALARMA,
+    input [23:0] ALARMA,
     input resetM,
-    input wire [7:0] DIR_DATO,
+    inout wire [7:0] DIR_DATO,
     input wire [3:0] POSICION,
-    input RD,
+    input READ,
     input [9:0] Qv,
     input [9:0] Qh,
     input wire reloj,
@@ -28,20 +29,20 @@ module Numeros(
     wire [7:0] addr2;
     
  Manejo_Entradas inst_Manejo_Entradas(
-          //.bit_alarma(bit_alarma),
-          /*.Contador_pos_f(Contador_pos_f), 
+          .Contador_pos_f(Contador_pos_f), 
           .Contador_pos_h(Contador_pos_h), 
-          .Contador_pos_cr(Contador_pos_cr),*/
-          .A_A(A_A),
+          .Contador_pos_cr(Contador_pos_cr),
+          .P_FECHA(P_FECHA),
+          .P_HORA(P_HORA),
           .P_CRONO(P_CRONO),
           .DIR_DATO(DIR_DATO),
           .POSICION(POSICION),
-          .RD(RD),
+          .READ(READ),
           .resetM(resetM),
           .reloj(reloj),
           .Qh(Qh[9:3]),
           .Qv(Qv),
-          //.ALARMA(ALARMA),
+          .ALARMA(ALARMA),
           .DIR_MEM(addr2),
           .cam_co(cam_co)
           );
@@ -136,8 +137,8 @@ module Numeros(
     8'h46: data = 16'h3980; //   111  11   
     8'h47: data = 16'h3180; //   11   11   
     8'h48: data = 16'h6180; //  11    11   
-    8'h49: data = 16'h7FE8; // 11111111111 
-    8'h4a: data = 16'h7FE8; // 11111111111 
+    8'h49: data = 16'h7FF0; // 11111111111 /*8'h49: data = 16'h7FE8;*/
+    8'h4a: data = 16'h7FF0; // 11111111111 /* 8'h4a: data = 16'h7FE8;*/
     8'h4b: data = 16'h0180; //        11   
     8'h4c: data = 16'h0180; //        11   
     8'h4d: data = 16'h0180; //        11   

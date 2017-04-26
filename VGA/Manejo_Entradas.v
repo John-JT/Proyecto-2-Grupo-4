@@ -1,19 +1,19 @@
 `timescale 1ns / 1ps
 module Manejo_Entradas(
-    //input bit_alarma,
-    /*input [1:0] Contador_pos_f,
+    input [1:0] Contador_pos_f,
     input [1:0] Contador_pos_h,
-    input [1:0] Contador_pos_cr,*/
-    input A_A,
+    input [1:0] Contador_pos_cr,
+    input P_FECHA,
+    input P_HORA,
     input P_CRONO,
-    input [7:0 ]DIR_DATO,
+    inout [7:0 ]DIR_DATO,
     input [3:0] POSICION,
-    input RD,
+    input READ,
     input resetM,
     input reloj,
     input [6:0] Qh,
     input [9:0] Qv,
-    //input [23:0] ALARMA,
+    input [23:0] ALARMA,
     output [7:0] DIR_MEM, 
     output [8:0] cam_co
     );
@@ -43,10 +43,13 @@ reg [6:0] M_h;
 reg [3:0] SELEC_COL;
 reg [7:0] DIR;
 reg [3:0] DIR1, DIR2, DIR3, DIR4, DIR5, DIR6, DIR7, DIR8, DIR9, DIR10, DIR11, DIR12, DIR13, DIR14, DIR15, DIR16, DIR17, DIR18;
+reg [3:0] DIRC1, DIRC2, DIRC3, DIRC4, DIRC5, DIRC6;
+reg [3:0] DCC1, DCC2, DCC3;
+reg [3:0] UNIC1, UNIC2, UNIC3;
 reg pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9;
 always@(posedge reloj)begin
 if (M_v >= num_hcv && M_v < 6'd13 )begin
-    if (M_h >= hdc_hora && M_h < huni2_hora /*&& Contador_pos_h == 2'd0*/ )begin
+    if (M_h >= hdc_hora && M_h < huni2_hora && Contador_pos_h == 2'd2 && P_HORA == 1'b1 )begin
        pos1 <= 1'b1;
        pos2 <= 1'b0;
        pos3 <= 1'b0;
@@ -57,7 +60,7 @@ if (M_v >= num_hcv && M_v < 6'd13 )begin
        pos8 <= 1'b0;
        pos9 <= 1'b0;
        end
-    else if (M_h >= hdc_min && M_h < huni2_min /*&& Contador_pos_h == 2'd1*/)begin
+    else if (M_h >= hdc_min && M_h < huni2_min && Contador_pos_h == 2'd1 && P_HORA == 1'b1)begin
        pos2 <= 1'b1;
        pos1 <= 1'b0;
        pos3 <= 1'b0;
@@ -68,7 +71,7 @@ if (M_v >= num_hcv && M_v < 6'd13 )begin
        pos8 <= 1'b0;
        pos9 <= 1'b0;
        end
-    else if (M_h >= hdc_seg && M_h < huni2_seg /*&& Contador_pos_h == 2'd2*/)begin
+    else if (M_h >= hdc_seg && M_h < huni2_seg && Contador_pos_h == 2'd0 && P_HORA == 1'b1)begin
        pos3 <= 1'b1;
        pos1 <= 1'b0;
        pos2 <= 1'b0;
@@ -79,7 +82,7 @@ if (M_v >= num_hcv && M_v < 6'd13 )begin
        pos8 <= 1'b0;
        pos9 <= 1'b0;
        end
-    else if (M_h >= cdc_hora && M_h < 7'd70 /*&& Contador_pos_cr == 2'd0*/)begin
+    else if (M_h >= cdc_hora && M_h < 7'd70 && Contador_pos_cr == 2'd2 && P_CRONO == 1'b1)begin
        pos4 <= 1'b1;
        pos1 <= 1'b0;
        pos2 <= 1'b0;
@@ -90,7 +93,7 @@ if (M_v >= num_hcv && M_v < 6'd13 )begin
        pos8 <= 1'b0;
        pos9 <= 1'b0;
        end
-    else if (M_h >= cdc_min && M_h < 7'd76 /*&& Contador_pos_cr == 2'd1*/)begin
+    else if (M_h >= cdc_min && M_h < 7'd76 && Contador_pos_cr == 2'd1 && P_CRONO == 1'b1)begin
        pos5 <= 1'b1;
        pos1 <= 1'b0;
        pos2 <= 1'b0;
@@ -101,7 +104,7 @@ if (M_v >= num_hcv && M_v < 6'd13 )begin
        pos8 <= 1'b0;
        pos9 <= 1'b0;
        end
-    else if (M_h >= cdc_seg && M_h < 7'd82 /*&& Contador_pos_cr == 2'd2*/)begin
+    else if (M_h >= cdc_seg && M_h < 7'd82 && Contador_pos_cr == 2'd0 && P_CRONO == 1'b1)begin
        pos6 <= 1'b1;
        pos1 <= 1'b0;
        pos2 <= 1'b0;
@@ -123,7 +126,7 @@ if (M_v >= num_hcv && M_v < 6'd13 )begin
 end
 
 else if (M_v >= num_fechav && M_v < 6'd18)begin
-    if (M_h >= dc_dia && M_h < 7'd38 /*&& Contador_pos_f== 2'd0*/)begin
+    if (M_h >= dc_dia && M_h < 7'd38 && Contador_pos_f== 2'd0 && P_FECHA == 1'b1 )begin
        pos7 <= 1'b1;
        pos1 <= 1'b0;
        pos2 <= 1'b0;
@@ -134,7 +137,7 @@ else if (M_v >= num_fechav && M_v < 6'd18)begin
        pos8 <= 1'b0;
        pos9 <= 1'b0;
        end
-    else if (M_h >= dc_mes && M_h < 7'd46 /*&& Contador_pos_f== 2'd1*/)begin
+    else if (M_h >= dc_mes && M_h < 7'd46 && Contador_pos_f== 2'd1 && P_FECHA == 1'b1)begin
        pos8 <= 1'b1;
        pos1 <= 1'b0;
        pos2 <= 1'b0;
@@ -145,7 +148,7 @@ else if (M_v >= num_fechav && M_v < 6'd18)begin
        pos7 <= 1'b0;
        pos9 <= 1'b0;
        end
-    else if (M_h >= dc_ano && M_h < 7'd56 /*&& Contador_pos_f== 2'd2*/)begin
+    else if (M_h >= dc_ano && M_h < 7'd56 && Contador_pos_f== 2'd2 && P_FECHA == 1'b1 )begin
        pos9 <= 1'b1;
        pos1 <= 1'b0;
        pos2 <= 1'b0;
@@ -204,41 +207,71 @@ always@(posedge reloj) begin
         UNI8 <= 4'h0;
         DC9 <= 4'h0;
         UNI9 <= 4'h0;
+        DCC1 <= 4'h0;
+        UNIC1 <= 4'h0;
+        DCC2 <= 4'h0;
+        UNIC2 <= 4'h0;
+        DCC3 <= 4'h0;
+        UNIC3 <= 4'h0;
     end
     else begin
-    if (POSICION == 4'd3)begin
+    if (POSICION == 4'd5 && READ == 1'b1)begin
          DC1 <= DC;
          UNI1 <= UNI;
          end
-    else if(POSICION == 4'd4)begin
+    else if(POSICION == 4'd4 && READ == 1'b1)begin
          DC2 <= DC;
          UNI2 <= UNI;
     end
-    else if (POSICION == 4'd5)begin
+    else if (POSICION == 4'd3 && READ == 1'b1)begin
          DC3 <= DC;
          UNI3 <= UNI;
     end
-    else if (POSICION == 4'd6)begin
+    else if (POSICION == 4'd8 && READ == 1'b1)begin
+    if (P_CRONO)
+    begin
+        DCC1 <= ALARMA[23:20];
+        UNIC1 <= ALARMA [19:16];
+    end
+    else 
+    begin
          DC4 <= DC;
          UNI4 <= UNI;
     end
-    else if (POSICION  == 4'd7)begin
+    end
+    else if (POSICION  == 4'd7 && READ == 1'b1)begin
+    if (P_CRONO)
+    begin
+        DCC2 <= ALARMA [15:12];
+        UNIC2 <= ALARMA [11:8];
+    end
+    else 
+    begin
          DC5 <= DC;
          UNI5 <= UNI;
     end
-    else if (POSICION == 4'd8)begin
+    end
+    else if (POSICION == 4'd6 && READ == 1'b1)begin
+    if (P_CRONO)
+   begin
+        DCC3 <= ALARMA [7:4];
+        UNIC3 <= ALARMA [3:0];
+    end
+    else 
+    begin
          DC6 <= DC;
          UNI6 <= UNI;            
     end
-    else if (POSICION == 4'd0)begin
+    end
+    else if (POSICION == 4'd0 && READ == 1'b1)begin
          DC7 <= DC;
          UNI7 <= UNI;
     end
-    else if (POSICION == 4'd1)begin
+    else if (POSICION == 4'd1 && READ == 1'b1)begin
          DC8 <= DC;
          UNI8 <= UNI;    
     end
-    else if (POSICION == 4'd2)begin
+    else if (POSICION == 4'd2 && READ == 1'b1)begin
          DC9 <= DC;
          UNI9 <= UNI;
     end
@@ -249,11 +282,11 @@ always @(posedge reloj)begin
     if (resetM == 1'b1) begin
         DIR <= 8'h00;
     end
-    else if (RD == 1'b0 && resetM == 1'b0 && A_A == 1'b0)begin
+    else if (READ == 1'b1 && resetM == 1'b0)begin
        DC <= {DIR_DATO[7], DIR_DATO[6], DIR_DATO[5], DIR_DATO[4]};
        UNI <= {DIR_DATO[3], DIR_DATO[2], DIR_DATO[1], DIR_DATO[0]};
         end
-        if (M_v >= num_hcv && M_v < 6'd13 )
+        if (M_v >= num_hcv && M_v < 6'd13)
         begin
             if (M_h >= hdc_hora && M_h < huni_hora)begin
                 DIR <= {DIR1,SELEC_COL};
@@ -276,44 +309,46 @@ always @(posedge reloj)begin
             
                             /*CRONOMETRO*/
             else if (M_h >= cdc_hora && M_h < cuni_hora)begin
-                /*if (P_CRONO)
-                DIR <= {ALARMA[23:20], SELEC_COL};
-                else*/
+                if (P_CRONO)
+                DIR <= {DIRC1, SELEC_COL};
+                else
                 DIR <= {DIR7, SELEC_COL};
             end
             else if (M_h >= cuni_hora && M_h < 7'd70)begin
-                /*if (P_CRONO)
-                DIR <= {ALARMA[19:16], SELEC_COL};
-                else*/
+                if (P_CRONO)
+                DIR <= {DIRC2, SELEC_COL};
+                else
                 DIR <= {DIR8, SELEC_COL};
             end
             else if (M_h >= cdc_min && M_h < cuni_min)begin
-                /*if (P_CRONO)
-                DIR <= {ALARMA[15:12], SELEC_COL};
-                else*/
+                if (P_CRONO)
+                DIR <= {DIRC3, SELEC_COL};
+                else
                 DIR <= {DIR9, SELEC_COL};
             end
             else if (M_h >= cuni_min && M_h < 7'd76)begin
-                /*if (P_CRONO)
-                DIR <= {ALARMA[11:8], SELEC_COL};
-                else*/
+                if (P_CRONO)
+                DIR <= {DIRC4, SELEC_COL};
+                else
                 DIR <= {DIR10, SELEC_COL};
             end    
             else if (M_h >= cdc_seg && M_h < cuni_seg)begin
-                /*if (P_CRONO)
-                DIR <= {ALARMA[7:4], SELEC_COL};
-                else*/
+                if (P_CRONO)
+                DIR <= {DIRC5, SELEC_COL};
+                else
                 DIR <= {DIR11, SELEC_COL};
             end
             else if (M_h >= cuni_seg && M_h < 7'd82)begin
-                /*if (P_CRONO)
-                DIR <= {ALARMA[3:0], SELEC_COL};
-                else*/
+                if (P_CRONO)
+                DIR <= {DIRC6, SELEC_COL};
+                else
                 DIR <= {DIR12, SELEC_COL};
             end    
             else
-                DIR <= 8'h00;
+             DIR <= 8'h00; 
             end
+            
+            
         else if (M_v >= num_fechav && M_v < 6'd18)
             begin
             if (M_h >= dc_dia && M_h < uni_dia)begin
@@ -341,7 +376,7 @@ always @(posedge reloj)begin
                 DIR <= {DIR18, SELEC_COL};
             end
             else
-                DIR <= 8'h00;
+             DIR <= 8'h00; 
             end
        
  end  
@@ -598,6 +633,134 @@ always @(posedge reloj)begin
                      default: DIR18 = 8'h00;
                      endcase
                        
+                       
+                       
+                       
+                       
+                       
+                      
+                       
+                       
+               always @(DCC1)
+                   case (DCC1)
+                     4'b0000: DIRC1 = CERO;
+                     4'b0001: DIRC1 = UNO;
+                     4'b0010: DIRC1 = DOS;
+                     4'b0011: DIRC1 = TRES;
+                     4'b0100: DIRC1 = CUATRO;
+                     4'b0101: DIRC1 = CINCO;
+                     4'b0110: DIRC1 = SEIS;
+                     4'b0111: DIRC1 = SIETE;
+                     4'b1000: DIRC1 = OCHO;
+                     4'b1001: DIRC1 = NUEVE;
+                     default: DIRC1 = 8'h00;
+                   endcase
+              always @(UNIC1)
+                    case (UNIC1)
+                     4'b0000: DIRC2 = CERO;
+                     4'b0001: DIRC2 = UNO;
+                     4'b0010: DIRC2 = DOS;
+                     4'b0011: DIRC2 = TRES;
+                     4'b0100: DIRC2 = CUATRO;
+                     4'b0101: DIRC2 = CINCO;
+                     4'b0110: DIRC2 = SEIS;
+                     4'b0111: DIRC2 = SIETE;
+                     4'b1000: DIRC2 = OCHO;
+                     4'b1001: DIRC2 = NUEVE;
+                     default: DIRC2 = 8'h00;
+                     endcase
+               always @(DCC2)
+                   case (DCC2)
+                     4'b0000: DIRC3 = CERO;
+                     4'b0001: DIRC3 = UNO;
+                     4'b0010: DIRC3 = DOS;
+                     4'b0011: DIRC3 = TRES;
+                     4'b0100: DIRC3 = CUATRO;
+                     4'b0101: DIRC3 = CINCO;
+                     4'b0110: DIRC3 = SEIS;
+                     4'b0111: DIRC3 = SIETE;
+                     4'b1000: DIRC3 = OCHO;
+                     4'b1001: DIRC3 = NUEVE;
+                     default: DIRC3 = 8'h00;
+                   endcase
+               always @(UNIC2)
+                    case (UNIC2)
+                     4'b0000: DIRC4 = CERO;
+                     4'b0001: DIRC4 = UNO;
+                     4'b0010: DIRC4 = DOS;
+                     4'b0011: DIRC4 = TRES;
+                     4'b0100: DIRC4 = CUATRO;
+                     4'b0101: DIRC4 = CINCO;
+                     4'b0110: DIRC4 = SEIS;
+                     4'b0111: DIRC4 = SIETE;
+                     4'b1000: DIRC4 = OCHO;
+                     4'b1001: DIRC4 = NUEVE;
+                     default: DIRC4 = 8'h00;
+                         endcase
+                       
+               always @(DCC3)
+                   case (DCC3)
+                     4'b0000: DIRC5 = CERO;
+                     4'b0001: DIRC5 = UNO;
+                     4'b0010: DIRC5 = DOS;
+                     4'b0011: DIRC5 = TRES;
+                     4'b0100: DIRC5 = CUATRO;
+                     4'b0101: DIRC5 = CINCO;
+                     4'b0110: DIRC5 = SEIS;
+                     4'b0111: DIRC5 = SIETE;
+                     4'b1000: DIRC5 = OCHO;
+                     4'b1001: DIRC5 = NUEVE;
+                     default: DIRC5 = 8'h00;
+                         endcase
+              always @(UNIC3)
+                    case (UNIC3)
+                     4'b0000: DIRC6 = CERO;
+                     4'b0001: DIRC6 = UNO;
+                     4'b0010: DIRC6 = DOS;
+                     4'b0011: DIRC6 = TRES;
+                     4'b0100: DIRC6 = CUATRO;
+                     4'b0101: DIRC6 = CINCO;
+                     4'b0110: DIRC6 = SEIS;
+                     4'b0111: DIRC6 = SIETE;
+                     4'b1000: DIRC6 = OCHO;
+                     4'b1001: DIRC6 = NUEVE;
+                     default: DIRC6 = 8'h00;
+                    endcase
+                       
+                       
                  assign DIR_MEM = DIR;		
-				
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 endmodule

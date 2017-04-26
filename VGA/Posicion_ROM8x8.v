@@ -1,8 +1,6 @@
 `timescale 1ns / 1ps
 
 module Posicion_ROM8x8(
-    //input bit_alarma,
-    input A_A,
     input resetM,
     input [6:0] Qh,
     input [9:0] Qv,

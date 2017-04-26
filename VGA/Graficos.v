@@ -1,25 +1,24 @@
 `timescale 1ns / 1ps
 
-module Top(
+module Graficos(
+    input [1:0] Contador_pos_f,
+    input [1:0] Contador_pos_h,
+    input [1:0] Contador_pos_cr,
     input bit_alarma,
-    //input [23:0] ALARMA,
-    input [7:0] DIR_DATO,
+    input [23:0] ALARMA,
+    inout [7:0] DIR_DATO,
     input [3:0] POSICION,
-    input RD,
+    input READ,
     input P_FECHA,
     input P_HORA,
     input P_CRONO,
-    input A_A,    
     input reloj,
     input resetM,
-    //output  Impresion,
     output  H_Syncreg,
     output  V_Syncreg,
     output  [3:0] R,
     output  [3:0] G,
-    output  [3:0] B/*,
-    output [9:0] Qh_tb,
-    output [9:0] Qv_tb*/
+    output  [3:0] B
     );
     wire [8:0] cam_co;
     wire [9:0] Qh;
@@ -47,7 +46,6 @@ module Top(
         
     font_rom8x8 inst_font_rom8x8(
     .bit_alarma(bit_alarma),
-    .A_A(A_A),    
     .Qh(Qh),
     .Qv(Qv),
     .resetM(resetM),
@@ -57,7 +55,6 @@ module Top(
      
     font_rom8x16 inst_font_rom8x16(
      .bit_alarma(bit_alarma),
-     .A_A(A_A),    
      .Qh(Qh),
      .Qv(Qv),
      .resetM(resetM),
@@ -67,16 +64,17 @@ module Top(
       
     Numeros inst_Numeros(
           .bit_alarma(bit_alarma),
-          /*.Contador_pos_f(Contador_pos_f), 
+          .Contador_pos_f(Contador_pos_f), 
           .Contador_pos_h(Contador_pos_h), 
-          .Contador_pos_cr(Contador_pos_cr),*/
-          .A_A(A_A),    
+          .Contador_pos_cr(Contador_pos_cr),
+          .P_FECHA(P_FECHA),
+          .P_HORA(P_HORA),
           .P_CRONO(P_CRONO),
-          //.ALARMA(ALARMA),
+          .ALARMA(ALARMA),
           .resetM(resetM),
           .DIR_DATO(DIR_DATO),
           .POSICION(POSICION),
-          .RD(RD),
+          .READ(READ),
           .Qv(Qv),
           .Qh(Qh),
           .reloj(reloj),
@@ -93,7 +91,6 @@ module Top(
         .P_FECHA(P_FECHA),
         .P_HORA(P_HORA), 
         .P_CRONO(P_CRONO),
-        .A_A(A_A),    
         .H_ON(H_ON),
         .V_ON(V_ON),
         .Qh(Qh),
@@ -102,8 +99,7 @@ module Top(
         .BIT_FUENTE(BIT_FUENTE),
         .R(R),
         .G(G),
-        .B(B)/*,
-        .Impresion(Impresion)*/  
+        .B(B)
         );
         
  Impresion_Imagenes inst_Impresion_Imagenes(

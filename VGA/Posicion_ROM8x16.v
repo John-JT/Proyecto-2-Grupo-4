@@ -1,10 +1,8 @@
 `timescale 1ns / 1ps
 
 module Posicion_ROM8x16(
-//input bit_alarma,
-input A_A,
 input resetM,
-input [6:0] Qh, //input [9:0] Qh,
+input [6:0] Qh, 
 input [9:0] Qv,
 input reloj,
 output [8:0] DIR8x16
@@ -70,7 +68,7 @@ parameter FECHAU_v = 6'd18; parameter FECHAD_v = 6'd20; parameter mitad = 6'd19;
             else
             begin
                                              /*HORA Y CRONO*/                       
-                if (M_v >= HCU_v && M_v < MITAD && A_A == 1'b0)
+                if (M_v >= HCU_v && M_v < MITAD)
                 begin
                                 /*HORA*/
                    if (M_h >= H1_h && M_h < O1_h)
@@ -119,7 +117,7 @@ parameter FECHAU_v = 6'd18; parameter FECHAD_v = 6'd20; parameter mitad = 6'd19;
                         DIR <= 9'h000;  
                 end
                 
-                else if (M_v >= MITAD && M_v < HCD_v && A_A == 1'b0)
+                else if (M_v >= MITAD && M_v < HCD_v)
                 begin
                                  /*HORA*/
                    if (M_h >= H1_h && M_h < O1_h)
@@ -169,7 +167,7 @@ parameter FECHAU_v = 6'd18; parameter FECHAD_v = 6'd20; parameter mitad = 6'd19;
                 end
                 
          
-                else if (M_v >= FECHAU_v && M_v < mitad && A_A == 1'b0)
+                else if (M_v >= FECHAU_v && M_v < mitad)
                 begin 
                                 /*DIA*/
 /*parameter D1_h = 7'd40; parameter I1_h = 7'd42; parameter A2_h = 7'd44; parameter Space1_h = 7'd46;
@@ -218,7 +216,7 @@ parameter FECHAU_v = 6'd18; parameter FECHAD_v = 6'd20; parameter mitad = 6'd19;
                         DIR <= 9'h000; 
                 end
                 
-                else if (M_v >= mitad && M_v <FECHAD_v && A_A == 1'b0)
+                else if (M_v >= mitad && M_v <FECHAD_v)
                 begin 
                                 /*DIA*/
 /*parameter D1_h = 7'd40; parameter I1_h = 7'd42; parameter A2_h = 7'd44; parameter Space1_h = 7'd46;
